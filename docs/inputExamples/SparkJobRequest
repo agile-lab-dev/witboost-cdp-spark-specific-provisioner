@@ -1,0 +1,40 @@
+
+```
+{"descriptor":
+    "dataProduct:
+       id: urn:dmb:dp:dmName:dpName:dpMajorVrs
+       name: dpName
+       domain: dmName
+       environment: environment
+       version: dpVersion
+       dataProductOwner: dataProductOwner
+       specific: {}
+    component:
+       id: urn:dmb:cmp:dmName:dpName:dpMajorVrs:componentName
+       name: componentName
+       description: description
+       version: cmpVersion
+       specific:
+          cdeService: cdeService
+          cdeCluster: cdeCluster
+          jobName: jobName
+          jar: s3://path/to/archive.jar
+          className: com.scania.bigdata.package.MainClass
+          jobConfig:
+            args: []
+            dependencies:
+              - s3://path/to/file1.jar
+              - s3://path/to/file2.jar
+            driverCores: 1
+            driverMemory: 2g
+            executorCores: 1
+            executorMemory: 2g
+            numExecutors: 4
+            logLevel: INFO
+            conf: {}
+            schedule:
+               cronExpression: '0 * * * *'
+               startDate: 2021-05-19T09:00:34Z
+               endDate: 2021-05-20T12:00:00Z
+"}
+```

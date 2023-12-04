@@ -1,0 +1,64 @@
+image: registry.gitlab.com/agilefactory/witboost.mesh/provisioning/cdp/cicd/scala-sbt
+
+stages:
+  - check
+  - compile
+  - test
+  - build
+  - deploy
+
+variables:
+  SBT_OPTS: "-Dsbt.global.base=sbt-cache/sbtboot -Dsbt.boot.directory=sbt-cache/boot -Dsbt.ivy.home=sbt-cache/ivy"
+
+cache:
+  untracked: true
+  paths:
+    - "sbt-cache/ivy/cache"
+    - "sbt-cache/boot"
+    - "sbt-cache/sbtboot"
+    - "sbt-cache/target"
+
+default:
+  before_script:
+    - export GITLAB_ARTIFACT_HOST="https://gitlab.com/api/v4/projects/51107980/packages/maven"
+    - export GITLAB_ARTIFACT_USER="gitlab-ci-token"
+    - export GITLAB_ARTIFACT_TOKEN=${CI_JOB_TOKEN}
+
+check:
+  stage: check
+  script:
+    - sbt scalafmtSbtCheck scalafmtCheckAll ${SBT_OPTS}
+
+compile:
+  stage: compile
+  script:
+    - sbt compile ${SBT_OPTS}
+
+test:
+  stage: test
+  script:
+    - sbt clean coverage test coverageAggregate ${SBT_OPTS}
+  coverage: '/Statement coverage[A-Za-z\.*]\s*:\s*([^%]+)/'
+  artifacts:
+    paths:
+      - target/scala-2.13/scoverage-report/*
+      - target/scala-2.13/coverage-report/*
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: target/scala-2.13/coverage-report/cobertura.xml
+      junit:
+        - api/target/test-reports/TEST-*.xml
+        - core/target/test-reports/TEST-*.xml
+        - error-handler/target/test-reports/TEST-*.xml
+        - service/target/test-reports/TEST-*.xml
+
+build:
+  stage: build
+  script:
+    - sbt 'set test in assembly := {}' clean assembly ${SBT_OPTS}
+  artifacts:
+    paths:
+      - api/target/scala-2.13/*.jar
+      - error-handler/target/scala-2.13/*.jar
+      - service/target/scala-2.13/*.jar
