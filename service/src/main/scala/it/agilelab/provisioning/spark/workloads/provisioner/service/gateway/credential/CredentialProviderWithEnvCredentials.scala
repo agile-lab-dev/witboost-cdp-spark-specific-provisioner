@@ -9,8 +9,8 @@ class CredentialProviderWithEnvCredentials extends CredentialProvider {
     dataProduct: String
   ): Either[CredentialProviderError, Auth.BasicCredential] = {
     val credentials = for {
-      user <- sys.env.get("BASIC_CRED_USER")
-      pass <- sys.env.get("BASIC_CRED_PASS")
+      user <- sys.env.get("CDP_DEPLOY_ROLE_USER")
+      pass <- sys.env.get("CDP_DEPLOY_ROLE_PASSWORD")
 
     } yield BasicCredential(user, pass)
 

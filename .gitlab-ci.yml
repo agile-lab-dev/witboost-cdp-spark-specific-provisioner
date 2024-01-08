@@ -1,11 +1,17 @@
+include:
+  - project: 'AgileFactory/Witboost.Mesh/witboost.Mesh.CI'
+    ref: 'main'
+    file: 'common/witboost.helm.gitlab-ci.yml'
+
 image: registry.gitlab.com/agilefactory/witboost.mesh/provisioning/cdp/cicd/scala-sbt
 
 stages:
+  - setup
   - check
   - compile
   - test
   - build
-  - deploy
+  - package
 
 variables:
   SBT_OPTS: "-Dsbt.global.base=sbt-cache/sbtboot -Dsbt.boot.directory=sbt-cache/boot -Dsbt.ivy.home=sbt-cache/ivy"
@@ -23,6 +29,30 @@ default:
     - export GITLAB_ARTIFACT_HOST="https://gitlab.com/api/v4/projects/51107980/packages/maven"
     - export GITLAB_ARTIFACT_USER="gitlab-ci-token"
     - export GITLAB_ARTIFACT_TOKEN=${CI_JOB_TOKEN}
+
+setup:
+  stage: setup
+  extends: .witboost.helm.base-job
+  cache: []
+  before_script: []
+  script:
+    - !reference [.witboost.helm.clone-scripts, script]
+    - !reference [.witboost.helm.get-version, script]
+    - echo "VERSION=${VERSION}" >> vars.env
+  artifacts:
+    reports:
+      dotenv: vars.env
+
+witboost.helm.checks:
+  stage: check
+  extends: .witboost.helm.base-job
+  before_script: []
+  cache: []
+  script:
+    - !reference [.witboost.helm.clone-scripts, script]
+    - !reference [.witboost.helm.checks, script]
+  variables:
+    CHART_FOLDER: helm
 
 check:
   stage: check
@@ -53,12 +83,38 @@ test:
         - error-handler/target/test-reports/TEST-*.xml
         - service/target/test-reports/TEST-*.xml
 
+# build:
+#   stage: build
+#   script:
+#     - sbt 'set test in assembly := {}' clean assembly ${SBT_OPTS}
+#   artifacts:
+#     paths:
+#       - api/target/scala-2.13/*.jar
+#       - error-handler/target/scala-2.13/*.jar
+#       - service/target/scala-2.13/*.jar
+
 build:
+  services:
+    - docker:19.03.12-dind
   stage: build
-  script:
-    - sbt 'set test in assembly := {}' clean assembly ${SBT_OPTS}
-  artifacts:
-    paths:
-      - api/target/scala-2.13/*.jar
-      - error-handler/target/scala-2.13/*.jar
-      - service/target/scala-2.13/*.jar
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+  script: |
+    apt-get install -yqq curl
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+    echo   "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu focal stable" |  tee /etc/apt/sources.list.d/docker.list > /dev/null
+    apt-get update -yqq
+    apt-get install -yqq docker-ce-cli
+    docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    echo "VERSION: $VERSION"
+    sbt clean compile k8tyGitlabCIPublish docker:publish ${SBT_OPTS}
+
+witboost.helm.deploy:
+  stage: package
+  before_script: []
+  cache: []
+  extends: .witboost.helm.deploy
+  only:
+    - master
+    - tags
+    - /(^release\/([0-9]+)\.([0-9]+))/

@@ -132,12 +132,12 @@ export CDP_PRIVATE_KEY=<Your CDP_PRIVATE_KEY>
 ```
 
 ```bash
-export BASIC_CRED_USER=<Your CDP workload user>
-export BASIC_CRED_PASS=<Your CDP workload password>
+export CDP_DEPLOY_ROLE_USER=<Your CDP workload user>
+export CDP_DEPLOY_ROLE_PASSWORD=<Your CDP workload password>
 ```
 
 Note: CDP_ACCESS_KEY_ID and CDP_PRIVATE_KEY can be generated on the CDP in Cloudera Management Console in the User Management section.
-BASIC_CRED_USER and BASIC_CRED_PASS can be generated in the same tab setting the Workload password.
+CDP_DEPLOY_ROLE_USER and CDP_DEPLOY_ROLE_PASSWORD can be generated in the same tab setting the Workload password.
 
 ## Deploying
 

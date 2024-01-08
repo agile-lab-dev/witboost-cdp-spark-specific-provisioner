@@ -2,6 +2,7 @@ import sbtassembly.PathList
 import wartremover.WartRemover.autoImport.Wart
 import sbt.Keys.{ csrConfiguration, updateClassifiers, updateSbtClassifiers }
 import lmcoursier.definitions.Authentication
+import Settings._
 
 inThisBuild(
   Seq(
@@ -14,10 +15,18 @@ inThisBuild(
 lazy val root = (project in file("."))
   .settings(
     name := "spark-workloads-provisioner",
+    mainClass in Compile := Some("it.agilelab.provisioning.spark.workloads.provisioner.app.Main"),
     artifactorySettings,
-    publish / skip := true
+    dockerBuildOptions ++= Seq("--network=host"),
+    dockerBaseImage := "registry.gitlab.com/agilefactory/witboost.mesh/provisioning/cdp/cicd/scala-sbt",
+    dockerUpdateLatest := true,
+    daemonUser := "daemon",
+    Docker / version := (ThisBuild / version).value,
+    Docker / packageName :=
+      s"registry.gitlab.com/agilefactory/witboost.mesh/provisioning/cdp-refresh/witboost.mesh.provisioning.workload.cdp.spark",
+    Docker / dockerExposedPorts := Seq(8093)
   )
-  .disablePlugins(AssemblyPlugin)
+  .enablePlugins(JavaAppPackaging)
   .aggregate(
     core,
     service,
@@ -37,8 +46,10 @@ lazy val core = (project in file("core"))
     libraryDependencies ++= Dependencies.http4sDependencies,
     artifactorySettings,
     commonAssemblySettings,
-    wartremoverSettings
+    wartremoverSettings,
+    k8tyGitlabPluginSettings
   )
+  .enablePlugins(K8tyGitlabPlugin)
 
 lazy val service = (project in file("service"))
   .settings(
@@ -46,9 +57,11 @@ lazy val service = (project in file("service"))
     libraryDependencies ++= Dependencies.testDependencies,
     artifactorySettings,
     commonAssemblySettings,
-    wartremoverSettings
+    wartremoverSettings,
+    k8tyGitlabPluginSettings
   )
   .dependsOn(core)
+  .enablePlugins(K8tyGitlabPlugin)
 
 lazy val api = (project in file("api"))
   .settings(
@@ -58,7 +71,8 @@ lazy val api = (project in file("api"))
     ) ++ Dependencies.http4sDependencies ++ Dependencies.circeDependencies,
     artifactorySettings,
     commonAssemblySettings,
-    wartremoverSettings
+    wartremoverSettings,
+    k8tyGitlabPluginSettings
   )
   .settings(
     Compile / guardrailTasks := GuardrailHelpers.createGuardrailTasks((Compile / sourceDirectory).value / "openapi") {
@@ -75,6 +89,7 @@ lazy val api = (project in file("api"))
     coverageExcludedPackages := "it.agilelab.provisioning.api.generated.*"
   )
   .dependsOn(service)
+  .enablePlugins(K8tyGitlabPlugin)
 
 lazy val commonAssemblySettings = Seq(
   assemblyJarName in assembly := s"${name.value}-${version.value}.jar",
