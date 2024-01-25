@@ -3,7 +3,6 @@ package it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.cre
 import cats.Show
 import cats.implicits._
 import it.agilelab.provisioning.aws.secrets.gateway.SecretsGatewayError
-import it.agilelab.provisioning.commons.showable.ShowableOps
 import it.agilelab.provisioning.commons.support.ParserError
 import it.agilelab.provisioning.mesh.repository.RepositoryError
 

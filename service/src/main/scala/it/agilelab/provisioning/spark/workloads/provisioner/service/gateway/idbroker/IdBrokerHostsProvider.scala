@@ -3,9 +3,11 @@ package it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.idb
 import cats.implicits.{ catsSyntaxEq, _ }
 import com.cloudera.cdp.de.model.ServiceDescription
 import it.agilelab.provisioning.commons.client.cdp.dl.CdpDlClient
-import IdBrokerHostsProviderError.NoIdBrokerInstanceGroupsFound
-import IdBrokerHostsProviderError.{ FindDlErr, NoDatalakeFound, NoIdBrokerInstanceGroupsFound }
-import IdBrokerHostsProviderError.NoIdBrokerInstanceGroupsFound
+import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.idbroker.IdBrokerHostsProviderError.{
+  FindDlErr,
+  NoDatalakeFound,
+  NoIdBrokerInstanceGroupsFound
+}
 
 import scala.jdk.CollectionConverters.CollectionHasAsScala
 

@@ -64,3 +64,6 @@ As outcome, it returns a ProvisioningStatus.
 <div style="text-align: center;">
 <img src="img/HLD_unprovision.png" alt="Test Image" width="50%" height="50%">
 </div>
+
+
+Note: In case the provisioner does not find the CDE Service and/or CDE Virtual cluster active the unprovisioning request is still considered completed and the output message will be "Unprovision skipped" followed by the error list.

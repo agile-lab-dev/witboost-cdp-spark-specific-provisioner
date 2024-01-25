@@ -2,8 +2,8 @@ package it.agilelab.provisioning.spark.workloads.provisioner.app.service.gateway
 
 import it.agilelab.provisioning.aws.s3.gateway.S3GatewayError.GetObjectContentErr
 import it.agilelab.provisioning.commons.audit.Audit
-import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.artifactory.ArtifactoryGatewayError.S3ArtefactError
 import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.artifactory.ArtifactoryGateway
+import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.artifactory.ArtifactoryGatewayError.S3ArtefactError
 import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.artifactory.s3.S3ArtifactoryGatewayWithAudit
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.funsuite.AnyFunSuite

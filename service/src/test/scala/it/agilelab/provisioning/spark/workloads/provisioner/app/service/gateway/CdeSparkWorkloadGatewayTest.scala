@@ -2,11 +2,7 @@ package it.agilelab.provisioning.spark.workloads.provisioner.app.service.gateway
 
 import com.cloudera.cdp.de.model.{ ServiceDescription, VcDescription }
 import it.agilelab.provisioning.commons.client.cdp.de.cluster.model.base.{ Job, JobDetails, Mount, SparkJob }
-import it.agilelab.provisioning.commons.client.cdp.de.cluster.model.request.{
-  CreateResourceReq,
-  UploadFileReq,
-  UpsertJobReq
-}
+import it.agilelab.provisioning.commons.client.cdp.de.cluster.model.request.{ CreateResourceReq, UploadFileReq }
 import it.agilelab.provisioning.mesh.self.service.api.model.Component.Workload
 import it.agilelab.provisioning.mesh.self.service.api.model.{ DataProduct, ProvisionRequest }
 import it.agilelab.provisioning.mesh.self.service.core.gateway.ComponentGatewayError
@@ -14,11 +10,11 @@ import it.agilelab.provisioning.mesh.self.service.core.model.ProvisionCommand
 import it.agilelab.provisioning.spark.workload.core.models.DpCdp
 import it.agilelab.provisioning.spark.workload.core.{ SparkCde, SparkWorkloadResponse }
 import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.mapper.SparkCdeWorkloadMapper
-import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.{ workload, CdeSparkWorkloadGateway }
 import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.workload.{
   SparkCdeWorkload,
   SparkCdeWorkloadGateway
 }
+import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.{ workload, CdeSparkWorkloadGateway }
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.funsuite.AnyFunSuite
 
@@ -44,6 +40,8 @@ class CdeSparkWorkloadGatewayTest extends AnyFunSuite with MockFactory {
         environment = "dev",
         version = "1",
         dataProductOwner = "dpOwner",
+        devGroup = "dev-group",
+        ownerGroup = "owner-group",
         specific = new DpCdp,
         components = Seq()
       ),

@@ -35,6 +35,8 @@ class CdeSparkWorkloadGatewayWithAuditTest extends AnyFunSuite with MockFactory 
         environment = "dev",
         version = "1",
         dataProductOwner = "dpOwner",
+        devGroup = "dev-group",
+        ownerGroup = "owner-group",
         specific = new DpCdp,
         components = Seq()
       ),
@@ -61,7 +63,7 @@ class CdeSparkWorkloadGatewayWithAuditTest extends AnyFunSuite with MockFactory 
     inSequence(
       (audit.info _)
         .expects(
-          "Executing Create(ProvisionCommand(x,ProvisionRequest(DataProduct(my-dp-id,my-dp-name,my-dp-domain,dev,1,dpOwner,DpCdp(),List()),Some(Workload(my-dp-wl-id,my-dp-name,my-dp-desc,0.0.1,SparkCdeJob(my-cde-service,my-cde-cluster,my-job-name,s3://bucket/jarfile.jar,com.MyClass,None))))))"
+          "Executing Create(ProvisionCommand(x,ProvisionRequest(DataProduct(my-dp-id,my-dp-name,my-dp-domain,dev,1,dpOwner,dev-group,owner-group,DpCdp(),List()),Some(Workload(my-dp-wl-id,my-dp-name,my-dp-desc,0.0.1,SparkCdeJob(my-cde-service,my-cde-cluster,my-job-name,s3://bucket/jarfile.jar,com.MyClass,None))))))"
         )
         .once(),
       (baseSparkWorkloadGateway.create _)
@@ -129,7 +131,7 @@ class CdeSparkWorkloadGatewayWithAuditTest extends AnyFunSuite with MockFactory 
     inSequence(
       (audit.info _)
         .expects(
-          "Executing Create(ProvisionCommand(x,ProvisionRequest(DataProduct(my-dp-id,my-dp-name,my-dp-domain,dev,1,dpOwner,DpCdp(),List()),Some(Workload(my-dp-wl-id,my-dp-name,my-dp-desc,0.0.1,SparkCdeJob(my-cde-service,my-cde-cluster,my-job-name,s3://bucket/jarfile.jar,com.MyClass,None))))))"
+          "Executing Create(ProvisionCommand(x,ProvisionRequest(DataProduct(my-dp-id,my-dp-name,my-dp-domain,dev,1,dpOwner,dev-group,owner-group,DpCdp(),List()),Some(Workload(my-dp-wl-id,my-dp-name,my-dp-desc,0.0.1,SparkCdeJob(my-cde-service,my-cde-cluster,my-job-name,s3://bucket/jarfile.jar,com.MyClass,None))))))"
         )
         .once(),
       (baseSparkWorkloadGateway.create _)
@@ -152,7 +154,7 @@ class CdeSparkWorkloadGatewayWithAuditTest extends AnyFunSuite with MockFactory 
     inSequence(
       (audit.info _)
         .expects(
-          "Executing Destroy(ProvisionCommand(x,ProvisionRequest(DataProduct(my-dp-id,my-dp-name,my-dp-domain,dev,1,dpOwner,DpCdp(),List()),Some(Workload(my-dp-wl-id,my-dp-name,my-dp-desc,0.0.1,SparkCdeJob(my-cde-service,my-cde-cluster,my-job-name,s3://bucket/jarfile.jar,com.MyClass,None))))))"
+          "Executing Destroy(ProvisionCommand(x,ProvisionRequest(DataProduct(my-dp-id,my-dp-name,my-dp-domain,dev,1,dpOwner,dev-group,owner-group,DpCdp(),List()),Some(Workload(my-dp-wl-id,my-dp-name,my-dp-desc,0.0.1,SparkCdeJob(my-cde-service,my-cde-cluster,my-job-name,s3://bucket/jarfile.jar,com.MyClass,None))))))"
         )
         .once(),
       (baseSparkWorkloadGateway.destroy _)
@@ -216,7 +218,7 @@ class CdeSparkWorkloadGatewayWithAuditTest extends AnyFunSuite with MockFactory 
     inSequence(
       (audit.info _)
         .expects(
-          "Executing Destroy(ProvisionCommand(x,ProvisionRequest(DataProduct(my-dp-id,my-dp-name,my-dp-domain,dev,1,dpOwner,DpCdp(),List()),Some(Workload(my-dp-wl-id,my-dp-name,my-dp-desc,0.0.1,SparkCdeJob(my-cde-service,my-cde-cluster,my-job-name,s3://bucket/jarfile.jar,com.MyClass,None))))))"
+          "Executing Destroy(ProvisionCommand(x,ProvisionRequest(DataProduct(my-dp-id,my-dp-name,my-dp-domain,dev,1,dpOwner,dev-group,owner-group,DpCdp(),List()),Some(Workload(my-dp-wl-id,my-dp-name,my-dp-desc,0.0.1,SparkCdeJob(my-cde-service,my-cde-cluster,my-job-name,s3://bucket/jarfile.jar,com.MyClass,None))))))"
         )
         .once(),
       (baseSparkWorkloadGateway.destroy _)

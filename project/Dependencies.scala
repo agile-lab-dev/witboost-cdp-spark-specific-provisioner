@@ -13,23 +13,19 @@ trait Dependencies {
     scalaMock
   )
 
-  lazy val scalaCommonVrs  = "0.0.0-SNAPSHOT-94c691a.wit-365-cdp-common-l"
-  lazy val s3Gat           = "it.agilelab.provisioning" %% "scala-mesh-aws-s3"              % scalaCommonVrs
-  lazy val secretsGat      = "it.agilelab.provisioning" %% "scala-mesh-aws-secrets"         % scalaCommonVrs
-  lazy val cdpDlComm       = "it.agilelab.provisioning" %% "scala-mesh-cdp-dl"              % scalaCommonVrs
-  lazy val cdpDeComm       = "it.agilelab.provisioning" %% "scala-mesh-cdp-de"              % scalaCommonVrs
-  lazy val meshComm        = "it.agilelab.provisioning" %% "scala-mesh-self-service"        % scalaCommonVrs
-  lazy val meshCommLambda  = "it.agilelab.provisioning" %% "scala-mesh-self-service-lambda" % scalaCommonVrs
-  lazy val scalaMeshCdpEnv = "it.agilelab.provisioning" %% "scala-mesh-cdp-env"             % scalaCommonVrs
+  lazy val scalaMeshCoreVersion = "0.0.0-SNAPSHOT-080d200a79.wit-1081-commons-lib"
 
   lazy val provisioningDependencies = Seq(
-    s3Gat,
-    secretsGat,
-    cdpDlComm,
-    cdpDeComm,
-    meshComm,
-    meshCommLambda,
-    scalaMeshCdpEnv
+    "it.agilelab.provisioning" %% "scala-mesh-aws-s3"                     % scalaMeshCoreVersion,
+    "it.agilelab.provisioning" %% "scala-mesh-aws-secrets"                % scalaMeshCoreVersion,
+    "it.agilelab.provisioning" %% "scala-mesh-aws-lambda-handlers"        % scalaMeshCoreVersion,
+    "it.agilelab.provisioning" %% "scala-mesh-cdp-de"                     % scalaMeshCoreVersion,
+    "it.agilelab.provisioning" %% "scala-mesh-cdp-dl"                     % scalaMeshCoreVersion,
+    "it.agilelab.provisioning" %% "scala-mesh-cdp-env"                    % scalaMeshCoreVersion,
+    "it.agilelab.provisioning" %% "scala-mesh-self-service"               % scalaMeshCoreVersion,
+    "it.agilelab.provisioning" %% "scala-mesh-self-service-lambda"        % scalaMeshCoreVersion,
+    "it.agilelab.provisioning" %% "scala-mesh-principals-mapping"         % scalaMeshCoreVersion,
+    "it.agilelab.provisioning" %% "scala-mesh-principals-mapping-samples" % scalaMeshCoreVersion
   )
 
   private val http4sVersion                  = "0.23.18"

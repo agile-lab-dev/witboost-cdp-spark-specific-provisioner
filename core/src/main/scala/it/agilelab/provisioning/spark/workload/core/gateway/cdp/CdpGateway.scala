@@ -1,10 +1,10 @@
 package it.agilelab.provisioning.spark.workload.core.gateway.cdp
 
 import cats.implicits.{ toBifunctorOps, toShow }
+import com.typesafe.scalalogging.Logger
 import it.agilelab.provisioning.commons.client.cdp.dl.CdpDlClient
 import it.agilelab.provisioning.commons.client.cdp.env.CdpEnvClient
-import CdpGatewayError.CdpGatewayInitErr
-import com.typesafe.scalalogging.Logger
+import it.agilelab.provisioning.spark.workload.core.gateway.cdp.CdpGatewayError.CdpGatewayInitErr
 
 /** CdpGateway
   *

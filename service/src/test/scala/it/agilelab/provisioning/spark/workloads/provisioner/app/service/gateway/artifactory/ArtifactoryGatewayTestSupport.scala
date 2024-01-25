@@ -2,7 +2,7 @@ package it.agilelab.provisioning.spark.workloads.provisioner.app.service.gateway
 
 import it.agilelab.provisioning.aws.s3.gateway.S3GatewayError.GetObjectContentErr
 import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.artifactory.ArtifactoryGatewayError
-import ArtifactoryGatewayError.S3ArtefactError
+import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.artifactory.ArtifactoryGatewayError.S3ArtefactError
 import org.scalatest.EitherValues._
 
 trait ArtifactoryGatewayTestSupport {

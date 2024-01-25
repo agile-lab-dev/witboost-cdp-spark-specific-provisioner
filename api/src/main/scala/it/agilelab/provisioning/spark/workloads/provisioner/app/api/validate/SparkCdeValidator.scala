@@ -52,12 +52,73 @@ object SparkCdeValidator {
           withinReq(r) { (_, w) =>
             cdpDeClient
               .findServiceByName(w.specific.cdeService)
+              .exists(_.isDefined)
+          },
+        _ => CdeValidationErrors.CDE_SERVICE_NOT_FOUND
+      )
+      .rule(
+        r =>
+          withinReq(r) { (_, w) =>
+            cdpDeClient
+              .findServiceByName(w.specific.cdeService)
+              .map(serviceOption =>
+                !(serviceOption.exists(_.getStatus != "ClusterCreationCompleted")
+                  && serviceOption.exists(_.getStatus != "ClusterDeletionCompleted"))
+              )
+              .getOrElse(true)
+          },
+        _ => CdeValidationErrors.CDE_SERVICE_NOT_RUNNING
+      )
+      .rule(
+        r =>
+          withinReq(r) { (_, w) =>
+            cdpDeClient
+              .findServiceByName(w.specific.cdeService)
+              .map(serviceOption =>
+                !serviceOption.exists(_.getStatus == "ClusterDeletionCompleted")
+              ) //error only if exists and was recently deleted"
+              .getOrElse(true)
+          },
+        _ => CdeValidationErrors.CDE_SERVICE_DELETED
+      )
+      .rule(
+        r =>
+          withinReq(r) { (_, w) =>
+            cdpDeClient
+              .findServiceByName(w.specific.cdeService)
               .flatMap(
                 _.flatMap(s => cdpDeClient.findVcByName(s.getClusterId, w.specific.cdeCluster).sequence).sequence
               )
               .exists(_.isDefined)
           },
-        _ => "CDE service or cluster not found"
+        _ => CdeValidationErrors.CDE_VIRTUAL_CLUSTER_NOT_FOUND
+      )
+      .rule(
+        r =>
+          withinReq(r) { (_, w) =>
+            !cdpDeClient
+              .findServiceByName(w.specific.cdeService)
+              .flatMap(
+                _.flatMap(s => cdpDeClient.findVcByName(s.getClusterId, w.specific.cdeCluster).sequence).sequence
+              )
+              .exists(item =>
+                item.exists(_.getStatus != "AppInstalled")
+                  && item.exists(_.getStatus != "AppDeleted")
+              )
+          },
+        _ => CdeValidationErrors.CDE_VIRTUAL_CLUSTER_NOT_ACTIVATED
+      )
+      .rule(
+        r =>
+          withinReq(r) { (_, w) =>
+            !cdpDeClient
+              .findServiceByName(w.specific.cdeService)
+              .flatMap(
+                _.flatMap(s => cdpDeClient.findVcByName(s.getClusterId, w.specific.cdeCluster).sequence).sequence
+              )
+              .exists(_.exists(_.getStatus == "AppDeleted"))
+          },
+        _ => CdeValidationErrors.CDE_VIRTUAL_CLUSTER_DELETED
       )
       .rule(
         r =>

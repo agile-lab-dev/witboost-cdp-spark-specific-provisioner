@@ -2,7 +2,6 @@ package it.agilelab.provisioning.spark.workloads.provisioner.app.api.validate
 
 import it.agilelab.provisioning.mesh.self.service.api.model.Component.Workload
 import it.agilelab.provisioning.mesh.self.service.api.model.DataProduct
-import io.circe.Json
 import it.agilelab.provisioning.spark.workload.core.SparkCde
 import it.agilelab.provisioning.spark.workload.core.models.DpCdp
 

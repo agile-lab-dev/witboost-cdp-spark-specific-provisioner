@@ -2,13 +2,13 @@ package it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.art
 
 import cats.implicits._
 import it.agilelab.provisioning.aws.s3.gateway.S3Gateway
-import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.artifactory.{
-  ArtifactoryGateway,
-  ArtifactoryGatewayError
-}
 import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.artifactory.ArtifactoryGatewayError.{
   S3ArtefactError,
   WronglyFormattedPathError
+}
+import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.artifactory.{
+  ArtifactoryGateway,
+  ArtifactoryGatewayError
 }
 
 class S3ArtifactoryGateway(s3Gateway: S3Gateway) extends ArtifactoryGateway {

@@ -1,13 +1,13 @@
 package it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.credential
 
+import cats.implicits._
+import io.circe.generic.auto._
 import it.agilelab.provisioning.aws.secrets.gateway.SecretsGateway
+import it.agilelab.provisioning.commons.http.Auth.BasicCredential
 import it.agilelab.provisioning.commons.support.ParserSupport
 import it.agilelab.provisioning.mesh.repository.Repository
-import io.circe.generic.auto._
-import cats.implicits._
-import it.agilelab.provisioning.commons.http.Auth.BasicCredential
 import it.agilelab.provisioning.mesh.self.service.lambda.core.model.Domain
-import CredentialProviderError._
+import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.credential.CredentialProviderError._
 
 class SecretsManagerCredentialsProvider(
   repository: Repository[Domain, String, Unit],

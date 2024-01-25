@@ -1,19 +1,21 @@
 package it.agilelab.provisioning.spark.workloads.provisioner.app.app.validate
 
-import cats.data.{ NonEmptyList, Validated }
 import cats.data.Validated.{ invalidNel, valid }
+import cats.data.{ NonEmptyList, Validated }
 import com.cloudera.cdp.de.model.{ ServiceSummary, VcSummary }
 import it.agilelab.provisioning.aws.s3.gateway.S3Gateway
 import it.agilelab.provisioning.commons.client.cdp.de.CdpDeClient
-import it.agilelab.provisioning.commons.validator.{ ValidationFail }
+import it.agilelab.provisioning.commons.validator.ValidationFail
 import it.agilelab.provisioning.mesh.self.service.api.model.Component._
 import it.agilelab.provisioning.mesh.self.service.api.model.{ DataProduct, ProvisionRequest }
-import it.agilelab.provisioning.spark.workloads.provisioner.app.api.validate.SparkCdeValidator.validator
-import it.agilelab.provisioning.spark.workload.core.{ JobConfig, SparkCde }
-import org.scalamock.scalatest.MockFactory
-import org.scalatest.funsuite.AnyFunSuite
 import it.agilelab.provisioning.spark.workload.core.SparkCde._
 import it.agilelab.provisioning.spark.workload.core.models.DpCdp
+import it.agilelab.provisioning.spark.workload.core.{ JobConfig, SparkCde }
+import it.agilelab.provisioning.spark.workloads.provisioner.app.api.validate
+import it.agilelab.provisioning.spark.workloads.provisioner.app.api.validate.CdeValidationErrors
+import it.agilelab.provisioning.spark.workloads.provisioner.app.api.validate.SparkCdeValidator.validator
+import org.scalamock.scalatest.MockFactory
+import org.scalatest.funsuite.AnyFunSuite
 
 class SparkCdeValidatorTest extends AnyFunSuite with MockFactory {
   val s3Gateway: S3Gateway     =
@@ -44,6 +46,8 @@ class SparkCdeValidatorTest extends AnyFunSuite with MockFactory {
     environment = "my-dp-environment",
     version = "my-dp-version",
     dataProductOwner = "my-dp-owner",
+    devGroup = "dev-group",
+    ownerGroup = "owner-group",
     specific = new DpCdp,
     components = Seq()
   )
@@ -51,12 +55,37 @@ class SparkCdeValidatorTest extends AnyFunSuite with MockFactory {
   test("validate return valid with basic workload") {
     val serviceSummary: ServiceSummary = new ServiceSummary()
     serviceSummary.setClusterId("x")
+    serviceSummary.setStatus("ClusterCreationCompleted")
+    val vcSummary: VcSummary           = new VcSummary()
+    vcSummary.setStatus("AppInstalled")
+
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
     (cdpDeClient.findServiceByName _)
       .expects(*)
       .returns(Right(Some(serviceSummary)))
     (cdpDeClient.findVcByName _)
       .expects(*, *)
-      .returns(Right(Some(new VcSummary())))
+      .returns(Right(Some(vcSummary)))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findVcByName _)
+      .expects(*, *)
+      .returns(Right(Some(vcSummary)))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findVcByName _)
+      .expects(*, *)
+      .returns(Right(Some(vcSummary)))
     (s3Gateway.objectExists _)
       .expects(*, *)
       .returns(Right(true))
@@ -68,15 +97,357 @@ class SparkCdeValidatorTest extends AnyFunSuite with MockFactory {
     assert(actual == Right(valid(ProvisionRequest(dataProduct, Some(workload)))))
   }
 
-  test("validate return invalid with bad jobname") {
+  test("validate return invalid with CDE Service not found") {
     val serviceSummary: ServiceSummary = new ServiceSummary()
     serviceSummary.setClusterId("x")
+    val vcSummary: VcSummary           = new VcSummary()
+    vcSummary.setStatus("AppInstalled")
+
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(None))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(None))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(None))
     (cdpDeClient.findServiceByName _)
       .expects(*)
       .returns(Right(Some(serviceSummary)))
     (cdpDeClient.findVcByName _)
       .expects(*, *)
-      .returns(Right(Some(new VcSummary())))
+      .returns(Right(Some(vcSummary)))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findVcByName _)
+      .expects(*, *)
+      .returns(Right(Some(vcSummary)))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findVcByName _)
+      .expects(*, *)
+      .returns(Right(Some(vcSummary)))
+    (s3Gateway.objectExists _)
+      .expects(*, *)
+      .returns(Right(true))
+
+    val actual = validator(
+      cdpDeClient,
+      s3Gateway
+    ).validate(ProvisionRequest(dataProduct, Some(workload)))
+    assert(
+      actual == Right(
+        invalidNel(
+          ValidationFail(ProvisionRequest(dataProduct, Some(workload)), CdeValidationErrors.CDE_SERVICE_NOT_FOUND)
+        )
+      )
+    )
+  }
+
+  test("validate return invalid with CDE Service not running") {
+    val serviceSummary: ServiceSummary = new ServiceSummary()
+    serviceSummary.setClusterId("x")
+    serviceSummary.setStatus("NotValidStatus")
+    val vcSummary: VcSummary           = new VcSummary()
+    vcSummary.setStatus("AppInstalled")
+
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findVcByName _)
+      .expects(*, *)
+      .returns(Right(Some(vcSummary)))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findVcByName _)
+      .expects(*, *)
+      .returns(Right(Some(vcSummary)))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findVcByName _)
+      .expects(*, *)
+      .returns(Right(Some(vcSummary)))
+    (s3Gateway.objectExists _)
+      .expects(*, *)
+      .returns(Right(true))
+
+    val actual = validator(
+      cdpDeClient,
+      s3Gateway
+    ).validate(ProvisionRequest(dataProduct, Some(workload)))
+
+    assert(
+      actual == Right(
+        invalidNel(
+          ValidationFail(ProvisionRequest(dataProduct, Some(workload)), CdeValidationErrors.CDE_SERVICE_NOT_RUNNING)
+        )
+      )
+    )
+  }
+
+  test("validate return invalid with CDE Service recently deleted") {
+    val serviceSummary: ServiceSummary = new ServiceSummary()
+    serviceSummary.setClusterId("x")
+    serviceSummary.setStatus("ClusterDeletionCompleted")
+    val vcSummary: VcSummary           = new VcSummary()
+    vcSummary.setStatus("AppInstalled")
+
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findVcByName _)
+      .expects(*, *)
+      .returns(Right(Some(vcSummary)))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findVcByName _)
+      .expects(*, *)
+      .returns(Right(Some(vcSummary)))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findVcByName _)
+      .expects(*, *)
+      .returns(Right(Some(vcSummary)))
+    (s3Gateway.objectExists _)
+      .expects(*, *)
+      .returns(Right(true))
+
+    val actual = validator(
+      cdpDeClient,
+      s3Gateway
+    ).validate(ProvisionRequest(dataProduct, Some(workload)))
+
+    assert(
+      actual == Right(
+        invalidNel(
+          ValidationFail(ProvisionRequest(dataProduct, Some(workload)), CdeValidationErrors.CDE_SERVICE_DELETED)
+        )
+      )
+    )
+
+  }
+
+  test("validate return invalid with CDE Virtual Cluster not found") {
+    val serviceSummary: ServiceSummary = new ServiceSummary()
+    serviceSummary.setClusterId("x")
+    val vcSummary: VcSummary           = new VcSummary()
+    vcSummary.setStatus("AppInstalled")
+
+    //Testing the CDE service
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(None))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    //Testing the CDE virtual cluster
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findVcByName _)
+      .expects(*, *)
+      .returns(Right(None))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findVcByName _)
+      .expects(*, *)
+      .returns(Right(None))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findVcByName _)
+      .expects(*, *)
+      .returns(Right(None))
+    //Testing the job
+    (s3Gateway.objectExists _)
+      .expects(*, *)
+      .returns(Right(true))
+
+    val actual = validator(
+      cdpDeClient,
+      s3Gateway
+    ).validate(ProvisionRequest(dataProduct, Some(workload)))
+    assert(
+      actual == Right(
+        invalidNel(
+          ValidationFail(
+            ProvisionRequest(dataProduct, Some(workload)),
+            CdeValidationErrors.CDE_VIRTUAL_CLUSTER_NOT_FOUND
+          )
+        )
+      )
+    )
+  }
+
+  test("validate return invalid with CDE cluster not properly activated") {
+    val serviceSummary: ServiceSummary = new ServiceSummary()
+    serviceSummary.setClusterId("x")
+    serviceSummary.setStatus("ClusterCreationCompleted")
+    val vcSummary: VcSummary           = new VcSummary()
+    vcSummary.setStatus("NotValidStatus")
+
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findVcByName _)
+      .expects(*, *)
+      .returns(Right(Some(vcSummary)))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findVcByName _)
+      .expects(*, *)
+      .returns(Right(Some(vcSummary)))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findVcByName _)
+      .expects(*, *)
+      .returns(Right(Some(vcSummary)))
+    (s3Gateway.objectExists _)
+      .expects(*, *)
+      .returns(Right(true))
+
+    val actual = validator(
+      cdpDeClient,
+      s3Gateway
+    ).validate(ProvisionRequest(dataProduct, Some(workload)))
+    assert(
+      actual == Right(
+        invalidNel(
+          ValidationFail(
+            ProvisionRequest(dataProduct, Some(workload)),
+            CdeValidationErrors.CDE_VIRTUAL_CLUSTER_NOT_ACTIVATED
+          )
+        )
+      )
+    )
+  }
+
+  test("validate return invalid with CDE cluster recently deleted") {
+    val serviceSummary: ServiceSummary = new ServiceSummary()
+    serviceSummary.setClusterId("x")
+    serviceSummary.setStatus("ClusterCreationCompleted")
+    val vcSummary: VcSummary           = new VcSummary()
+    vcSummary.setStatus("AppDeleted")
+
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findVcByName _)
+      .expects(*, *)
+      .returns(Right(Some(vcSummary)))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findVcByName _)
+      .expects(*, *)
+      .returns(Right(Some(vcSummary)))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findVcByName _)
+      .expects(*, *)
+      .returns(Right(Some(vcSummary)))
+    (s3Gateway.objectExists _)
+      .expects(*, *)
+      .returns(Right(true))
+
+    val actual = validator(
+      cdpDeClient,
+      s3Gateway
+    ).validate(ProvisionRequest(dataProduct, Some(workload)))
+    assert(
+      actual == Right(
+        invalidNel(
+          ValidationFail(ProvisionRequest(dataProduct, Some(workload)), CdeValidationErrors.CDE_VIRTUAL_CLUSTER_DELETED)
+        )
+      )
+    )
+  }
+
+  test("validate return invalid with bad jobname") {
+
+    val serviceSummary: ServiceSummary = new ServiceSummary()
+    serviceSummary.setClusterId("x")
+    serviceSummary.setStatus("ClusterCreationCompleted")
+    val vcSummary: VcSummary           = new VcSummary()
+    vcSummary.setStatus("AppInstalled")
+
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findVcByName _)
+      .expects(*, *)
+      .returns(Right(Some(vcSummary)))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findVcByName _)
+      .expects(*, *)
+      .returns(Right(Some(vcSummary)))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findVcByName _)
+      .expects(*, *)
+      .returns(Right(Some(vcSummary)))
     (s3Gateway.objectExists _)
       .expects(*, *)
       .returns(Right(true))
@@ -90,12 +461,37 @@ class SparkCdeValidatorTest extends AnyFunSuite with MockFactory {
   test("validate return invalid with wrong config") {
     val serviceSummary: ServiceSummary = new ServiceSummary()
     serviceSummary.setClusterId("x")
+    serviceSummary.setStatus("ClusterCreationCompleted")
+    val vcSummary: VcSummary           = new VcSummary()
+    vcSummary.setStatus("AppInstalled")
+
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
     (cdpDeClient.findServiceByName _)
       .expects(*)
       .returns(Right(Some(serviceSummary)))
     (cdpDeClient.findVcByName _)
       .expects(*, *)
-      .returns(Right(Some(new VcSummary())))
+      .returns(Right(Some(vcSummary)))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findVcByName _)
+      .expects(*, *)
+      .returns(Right(Some(vcSummary)))
+    (cdpDeClient.findServiceByName _)
+      .expects(*)
+      .returns(Right(Some(serviceSummary)))
+    (cdpDeClient.findVcByName _)
+      .expects(*, *)
+      .returns(Right(Some(vcSummary)))
     (s3Gateway.objectExists _)
       .expects(*, *)
       .returns(Right(false))

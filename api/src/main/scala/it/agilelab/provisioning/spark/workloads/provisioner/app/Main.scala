@@ -5,13 +5,13 @@ import com.comcast.ip4s.{ Host, Port }
 import com.typesafe.scalalogging.Logger
 import it.agilelab.provisioning.commons.config.Conf
 import it.agilelab.provisioning.spark.workload.core.context.ContextError
+import it.agilelab.provisioning.spark.workload.core.context.ContextError._
 import it.agilelab.provisioning.spark.workloads.provisioner.app.config.{
   ApplicationConfiguration,
   FrameworkDependencies,
   SparkProvisionerController
 }
 import org.http4s.ember.server.EmberServerBuilder
-import it.agilelab.provisioning.spark.workload.core.context.ContextError._
 
 object Main extends IOApp {
 

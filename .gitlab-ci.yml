@@ -83,16 +83,6 @@ test:
         - error-handler/target/test-reports/TEST-*.xml
         - service/target/test-reports/TEST-*.xml
 
-# build:
-#   stage: build
-#   script:
-#     - sbt 'set test in assembly := {}' clean assembly ${SBT_OPTS}
-#   artifacts:
-#     paths:
-#       - api/target/scala-2.13/*.jar
-#       - error-handler/target/scala-2.13/*.jar
-#       - service/target/scala-2.13/*.jar
-
 build:
   services:
     - docker:19.03.12-dind

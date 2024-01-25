@@ -1,7 +1,7 @@
 package it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.artifactory.s3
 
-import it.agilelab.provisioning.commons.audit.Audit
 import cats.implicits._
+import it.agilelab.provisioning.commons.audit.Audit
 import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.artifactory.{
   ArtifactoryGateway,
   ArtifactoryGatewayError

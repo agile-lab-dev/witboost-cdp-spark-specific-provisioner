@@ -64,6 +64,8 @@ class SparkCdeWorkloadMapperTest extends AnyFunSuite with MockFactory {
         environment = "dev",
         version = "1",
         dataProductOwner = "dpOwner",
+        devGroup = "dev-group",
+        ownerGroup = "owner-group",
         specific = new DpCdp,
         components = Seq()
       ),
@@ -148,6 +150,8 @@ class SparkCdeWorkloadMapperTest extends AnyFunSuite with MockFactory {
         environment = "dev",
         version = "1",
         dataProductOwner = "dpOwner",
+        devGroup = "dev-group",
+        ownerGroup = "owner-group",
         specific = new DpCdp,
         components = Seq()
       ),
@@ -240,6 +244,8 @@ class SparkCdeWorkloadMapperTest extends AnyFunSuite with MockFactory {
         environment = "dev",
         version = "1",
         dataProductOwner = "dpOwner",
+        devGroup = "dev-group",
+        ownerGroup = "owner-group",
         specific = new DpCdp,
         components = Seq()
       ),
@@ -356,6 +362,8 @@ class SparkCdeWorkloadMapperTest extends AnyFunSuite with MockFactory {
         environment = "dev",
         version = "1",
         dataProductOwner = "dpOwner",
+        devGroup = "dev-group",
+        ownerGroup = "owner-group",
         specific = new DpCdp,
         components = Seq()
       ),
@@ -452,6 +460,8 @@ class SparkCdeWorkloadMapperTest extends AnyFunSuite with MockFactory {
         environment = "dev",
         version = "1",
         dataProductOwner = "dpOwner",
+        devGroup = "dev-group",
+        ownerGroup = "owner-group",
         specific = new DpCdp,
         components = Seq()
       ),
@@ -571,6 +581,8 @@ class SparkCdeWorkloadMapperTest extends AnyFunSuite with MockFactory {
         environment = "dev",
         version = "1",
         dataProductOwner = "dpOwner",
+        devGroup = "",
+        ownerGroup = "",
         specific = new DpCdp,
         components = Seq()
       ),

@@ -1,16 +1,19 @@
 package it.agilelab.provisioning.spark.workloads.provisioner.service.gateway
 
 import it.agilelab.provisioning.commons.audit.Audit
-import it.agilelab.provisioning.mesh.self.service.core.gateway.{ ComponentGateway, ComponentGatewayError }
+import it.agilelab.provisioning.mesh.self.service.core.gateway.{
+  ComponentGateway,
+  ComponentGatewayError,
+  PermissionlessComponentGateway
+}
 import it.agilelab.provisioning.mesh.self.service.core.model.ProvisionCommand
-import io.circe.Json
 import it.agilelab.provisioning.spark.workload.core.models.DpCdp
 import it.agilelab.provisioning.spark.workload.core.{ SparkCde, SparkWorkloadResponse }
 
 class CdeSparkWorkloadGatewayWithAudit(
-  componentGateway: ComponentGateway[DpCdp, SparkCde, SparkWorkloadResponse],
+  componentGateway: PermissionlessComponentGateway[DpCdp, SparkCde, SparkWorkloadResponse],
   audit: Audit
-) extends ComponentGateway[DpCdp, SparkCde, SparkWorkloadResponse] {
+) extends PermissionlessComponentGateway[DpCdp, SparkCde, SparkWorkloadResponse] {
   override def create(
     request: ProvisionCommand[DpCdp, SparkCde]
   ): Either[ComponentGatewayError, SparkWorkloadResponse] = {
