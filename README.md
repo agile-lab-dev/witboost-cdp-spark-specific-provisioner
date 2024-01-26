@@ -98,7 +98,7 @@ This is a multi module sbt project:
 * **core**: Contains model case classes and shared logic among the projects
 * **service**: Contains the Provisioner Service logic. This is the module on which we provision the workload.
 
-See [HLD documentation](docs%2FHDL.md)  for more information about the logic of this project.
+See [HLD documentation](docs%2FcdpPublic%2FHLD.md)  for more information about the logic of this project.
 
 ## Running
 
@@ -108,8 +108,8 @@ To run the server locally, use:
 sbt compile run
 ```
 
-By default, the server binds to port 8093 on localhost. After it's up and running you can make provisioning requests to this address.  
-In [docs/inputExamples](docs%2FinputExamples) you can find some examples of input requests.
+By default, the server binds to port 8093 on localhost. After it's up and running you can make provisioning requests to this address.
+In [docs/cdpPublic/inputExamples](docs%2Fcdp%20Public%2FinputExamples) you can find some examples of input requests.
 
 ## Configuring
 

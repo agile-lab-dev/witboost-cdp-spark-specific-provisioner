@@ -42,9 +42,8 @@ The provisioner receives a provisioning request containing a YAML descriptor fro
 In the initial phase, the descriptor is decoded. Next, during the 'request validation' phase, the validator verifies the existence of the CDE service and cluster on the CDP. If this validation phase is passed successfully, the final check involves verifying the correctness of the fields provided.  
 This operation does not alter the CDE environment, and the only outcome is a ValidationResult.
 
-<div style="text-align: center;">
-<img src="img/HLD_validate.png" alt="Test Image" width="50%" height="50%">
-</div>
+
+![Validation](img/HLD_validate.png)
 
 
 #### Provision
@@ -52,18 +51,16 @@ The provisioner receives a provisioning request containing a YAML descriptor fro
 It validates the request following the steps described above and then creates on the CDP a new Spark Job inside the Virtual Cluster.  
 As outcome, it returns a ProvisioningStatus.
 
-<div style="text-align: center;">
-<img src="img/HLD_provision.png" alt="Test Image" width="50%" height="50%">
-</div>
+![Provisioning](img/HLD_provision.png)
+
 
 #### Unprovision
 The provisioner receives a provisioning request containing a YAML descriptor from the provisioning coordinator.  
 It validates the request following the steps described above and then destroys the Spark Job inside the Virtual Cluster.
 As outcome, it returns a ProvisioningStatus.
 
-<div style="text-align: center;">
-<img src="img/HLD_unprovision.png" alt="Test Image" width="50%" height="50%">
-</div>
+![Unprovisioning](img/HLD_unprovision.png)
+
 
 
 Note: In case the provisioner does not find the CDE Service and/or CDE Virtual cluster active the unprovisioning request is still considered completed and the output message will be "Unprovision skipped" followed by the error list.

@@ -1,7 +1,7 @@
-import wartremover.WartRemover.autoImport._
-import sbt._
-import sbt.Keys._
 import lmcoursier.definitions.Authentication
+import sbt.Keys._
+import sbt._
+import wartremover.WartRemover.autoImport._
 
 object Settings {
   lazy val k8tyGitlabPluginSettings = Seq(
