@@ -1,12 +1,14 @@
+<br/>
 <p align="center">
     <a href="https://www.agilelab.it/witboost">
         <img src="docs/img/witboost_logo.svg" alt="witboost" width=600 >
     </a>
 </p>  
+<br/>
 
-Designed by [Agile Lab](https://www.agilelab.it/), witboost is a versatile platform that addresses a wide range of sophisticated data engineering challenges. It enables businesses to discover, enhance, and productize their data, fostering the creation of automated data platforms that adhere to the highest standards of data governance. Want to know more about witboost? Check it out [here](https://www.agilelab.it/witboost) or [contact us!](https://www.agilelab.it/contacts)
+Designed by [Agile Lab](https://www.agilelab.it/), Witboost is a versatile platform that addresses a wide range of sophisticated data engineering challenges. It enables businesses to discover, enhance, and productize their data, fostering the creation of automated data platforms that adhere to the highest standards of data governance. Want to know more about Witboost? Check it out [here](https://www.agilelab.it/witboost) or [contact us!](https://www.agilelab.it/contacts)
 
-This repository is part of our [Starter Kit](https://github.com/agile-lab-dev/witboost-starter-kit) meant to showcase witboost's integration capabilities and provide a "batteries-included" product.
+This repository is part of our [Starter Kit](https://github.com/agile-lab-dev/witboost-starter-kit) meant to showcase Witboost's integration capabilities and provide a "batteries-included" product.
 
 # CDP Spark Specific Provisioner
 
@@ -98,7 +100,7 @@ This is a multi module sbt project:
 * **core**: Contains model case classes and shared logic among the projects
 * **service**: Contains the Provisioner Service logic. This is the module on which we provision the workload.
 
-See [HLD documentation](docs%2FcdpPublic%2FHLD.md)  for more information about the logic of this project.
+See [HLD documentation](docs/cdpPublic/HLD.md)  for more information about the logic of this project.
 
 ## Running
 
@@ -109,7 +111,7 @@ sbt compile run
 ```
 
 By default, the server binds to port 8093 on localhost. After it's up and running you can make provisioning requests to this address.
-In [docs/cdpPublic/inputExamples](docs%2Fcdp%20Public%2FinputExamples) you can find some examples of input requests.
+In [docs/cdpPublic/inputExamples](docs/cdpPublic/inputExamples) you can find some examples of input requests.
 
 ## Configuring
 
@@ -153,11 +155,13 @@ This project is available under the [Apache License, Version 2.0](https://openso
 
 ## About us
 
+<br/>
 <p align="center">
     <a href="https://www.agilelab.it">
         <img src="docs/img/agilelab_logo.svg" alt="Agile Lab" width=600>
     </a>
 </p>
+<br/>
 
 Agile Lab creates value for its Clients in data-intensive environments through customizable solutions to establish performance driven processes, sustainable architectures, and automated platforms driven by data governance best practices.
 
