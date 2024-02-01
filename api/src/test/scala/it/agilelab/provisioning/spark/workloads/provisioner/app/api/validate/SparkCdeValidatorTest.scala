@@ -1,4 +1,4 @@
-package it.agilelab.provisioning.spark.workloads.provisioner.app.app.validate
+package it.agilelab.provisioning.spark.workloads.provisioner.app.api.validate
 
 import cats.data.Validated.{ invalidNel, valid }
 import cats.data.{ NonEmptyList, Validated }

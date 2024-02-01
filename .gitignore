@@ -3,6 +3,10 @@
 project/project
 project/target
 target
-null/
-docs/cdpPublic/.$HLD_CDE_SparkProvisioner.drawio.bkp
-docs/cdpPublic/.$HLD_CDE_SparkProvisioner.drawio.dtmp
+
+# DrawIO backups
+*.drawio.bkp
+*.drawio.dtmp
+
+# MacOS
+.DS_Store

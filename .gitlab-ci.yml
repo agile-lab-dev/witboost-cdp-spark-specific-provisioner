@@ -82,6 +82,7 @@ test:
         - core/target/test-reports/TEST-*.xml
         - error-handler/target/test-reports/TEST-*.xml
         - service/target/test-reports/TEST-*.xml
+        - quartz-embedded-scheduler/target/test-reports/TEST-*.xml
 
 build:
   services:

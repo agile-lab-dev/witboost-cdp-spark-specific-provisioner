@@ -6,7 +6,6 @@ import io.circe.syntax._
 import io.circe.{ Decoder, Encoder }
 
 sealed trait SparkCde extends Product with Serializable
-
 object SparkCde {
 
   final case class SparkCdeJob(
