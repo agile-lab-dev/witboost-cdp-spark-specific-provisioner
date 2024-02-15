@@ -6,7 +6,7 @@ import it.agilelab.provisioning.mesh.self.service.core.gateway.ComponentGatewayE
 import it.agilelab.provisioning.spark.workload.core.SparkWorkloadResponse
 import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.clients.CdeClientFactory
 
-class SparkCdeWorkloadGateway(cdeClientFactory: CdeClientFactory) {
+class SparkCdeWorkloadGateway(cdeClientFactory: CdeClientFactory) extends SparkWorkloadGateway[SparkCdeWorkload] {
   private val ERROR: String         = "Job was properly created. but something goes wrong while trying to retrieve it"
   private val ERROR_DESTROY: String = "Job was properly destroyed but get job operation still return it"
 

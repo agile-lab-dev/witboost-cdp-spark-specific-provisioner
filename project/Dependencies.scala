@@ -13,8 +13,7 @@ trait Dependencies {
     scalaMock
   )
 
-  lazy val scalaMeshCoreVersion = "0.0.0-SNAPSHOT-080d200a79.wit-1081-commons-lib"
-
+  lazy val scalaMeshCoreVersion     = "0.0.0-SNAPSHOT-15dfac13ba.wit-1430-scala-mesh"
   lazy val provisioningDependencies = Seq(
     "it.agilelab.provisioning" %% "scala-mesh-aws-s3"                     % scalaMeshCoreVersion,
     "it.agilelab.provisioning" %% "scala-mesh-aws-secrets"                % scalaMeshCoreVersion,

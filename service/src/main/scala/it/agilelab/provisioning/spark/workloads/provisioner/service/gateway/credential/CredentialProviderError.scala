@@ -27,7 +27,6 @@ object CredentialProviderError {
 
   implicit def showCredentialProviderError: Show[CredentialProviderError] = Show.show {
     case CredentialProviderInitErr(throwable)                =>
-      println(throwable.getMessage)
       show"CredentialProviderInitErr(${throwable.getMessage})"
     case CredentialFindErr(domain, dataProduct, error)       =>
       show"CredentialFindError($domain,$dataProduct,$error)"

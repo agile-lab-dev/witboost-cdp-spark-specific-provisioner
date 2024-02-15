@@ -9,4 +9,5 @@ target
 *.drawio.dtmp
 
 # MacOS
+docs/.DS_Store
 .DS_Store

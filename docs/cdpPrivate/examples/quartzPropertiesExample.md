@@ -9,9 +9,9 @@ org.quartz.jobStore.driverDelegateClass = org.quartz.impl.jdbcjobstore.PostgreSQ
 org.quartz.jobStore.dataSource = quartzDS
 
 org.quartz.dataSource.quartzDS.driver = org.postgresql.Driver
-org.quartz.dataSource.quartzDS.URL = jdbc:postgresql://localhost:port/quartz
-org.quartz.dataSource.quartzDS.user = insert_database_here
-org.quartz.dataSource.quartzDS.password = insert_password_here
+org.quartz.dataSource.quartzDS.URL = jdbc:postgresql://localhost:5432/quartz
+org.quartz.dataSource.quartzDS.user = quartzUser
+org.quartz.dataSource.quartzDS.password = passwordHere
 
 
 

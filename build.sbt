@@ -62,7 +62,7 @@ lazy val service = (project in file("service"))
     wartremoverSettings,
     k8tyGitlabPluginSettings
   )
-  .dependsOn(core)
+  .dependsOn(core, quartzScheduler)
   .enablePlugins(K8tyGitlabPlugin)
 
 lazy val api = (project in file("api"))
@@ -90,7 +90,7 @@ lazy val api = (project in file("api"))
     },
     coverageExcludedPackages := "it.agilelab.provisioning.api.generated.*"
   )
-  .dependsOn(service)
+  .dependsOn(service, quartzScheduler)
   .enablePlugins(K8tyGitlabPlugin)
 
 lazy val quartzScheduler = (project in file("quartz-embedded-scheduler"))
@@ -98,12 +98,12 @@ lazy val quartzScheduler = (project in file("quartz-embedded-scheduler"))
     name := "spark-workloads-provisioner-quartz-embedded-scheduler",
     libraryDependencies ++= Dependencies.testDependencies,
     libraryDependencies ++= Dependencies.quartzAndLivyDependencies,
+    libraryDependencies ++= Dependencies.provisioningDependencies,
     artifactorySettings,
     commonAssemblySettings,
     wartremoverSettings,
     k8tyGitlabPluginSettings
   )
-  .dependsOn(core)
   .enablePlugins(K8tyGitlabPlugin)
 
 lazy val commonAssemblySettings = Seq(

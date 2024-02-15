@@ -1,7 +1,7 @@
 # High Level Design
 
 This document describes the High Level Design of the CDP Spark Specific Provisioner.
-The source diagrams can be found and edited in the [accompanying draw.io file](TODO).
+The source diagrams can be found and edited in the [accompanying draw.io file](HLD_private.drawio).
 
 ## Overview
 
@@ -59,6 +59,8 @@ As outcome, it returns a ProvisioningStatus.
 
 Note: If the job or trigger you want to provision already exist this is deleted and recreated.
 
+
+
 ![Provisioning](img/hld_provision.png)
 
 
@@ -72,7 +74,7 @@ As outcome, it returns a ProvisioningStatus.
 ![Unprovisioning](img/hld_unprovision.png)
 
 
-#### Job status API
+#### Job status API (still to be implemented)
 
 The user can:
 - request information about jobs in a "running" state;
@@ -83,7 +85,9 @@ The user can:
 In the last case the provisioner creates in the data storage a new Quartz trigger associated with the indicated job with immediate start, and launches the job.
 
 
-![Img](img/img.png)
+![Img](img/hld_job_status.png)
 
 
 Once the execution is complete the status of the Quartz job mirrors that of the Spark job associated with it. If the Spark job succeeds then so will the Quartz job and similarly if the Spark job fails the Quartz job will also fail.
+
+

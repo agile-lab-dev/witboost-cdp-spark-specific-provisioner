@@ -1,8 +1,8 @@
 package it.agilelab.provisioning.spark.workloads.provisioner.quartz.embedded.scheduler
 
+import it.agilelab.provisioning.spark.workloads.provisioner.quartz.{ SchedulerError, TriggerManager }
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.funsuite.AnyFunSuite
-import quartz.{ TriggerManager, TriggerManagerError }
 
 import java.util.Date
 
@@ -42,7 +42,7 @@ class TriggerManagerTest extends AnyFunSuite with MockFactory {
 
     result match {
       case Left(error) =>
-        assert(error.isInstanceOf[TriggerManagerError])
+        assert(error.isInstanceOf[SchedulerError])
       case Right(_)    =>
         fail("Expected an error but trigger creation was successful")
     }

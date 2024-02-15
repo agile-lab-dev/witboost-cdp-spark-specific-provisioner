@@ -35,12 +35,14 @@ CDE is fully integrated with [Cloudera Data Platform](https://www.cloudera.com/p
 ### CDE Spark Specific Provisioner
 This specific provisioner interacts in a synchronous way with a CDE environment by verifying provisioning requests and creating and destroying Spark Jobs.
 
+
 All operations that the provisioner can perform are called by a provisioning coordinator as a result of the creation or update of a Data Product on the Witboost platform.
 
 #### Validate
 The provisioner receives a provisioning request containing a YAML descriptor from the provisioning coordinator.  
 In the initial phase, the descriptor is decoded. Next, during the 'request validation' phase, the validator verifies the existence of the CDE service and cluster on the CDP. If this validation phase is passed successfully, the final check involves verifying the correctness of the fields provided.  
 This operation does not alter the CDE environment, and the only outcome is a ValidationResult.
+
 
 
 ![Validation](img/HLD_validate.png)
@@ -64,3 +66,5 @@ As outcome, it returns a ProvisioningStatus.
 
 
 Note: In case the provisioner does not find the CDE Service and/or CDE Virtual cluster active the unprovisioning request is still considered completed and the output message will be "Unprovision skipped" followed by the error list.
+
+

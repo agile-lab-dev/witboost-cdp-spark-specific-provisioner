@@ -21,7 +21,10 @@ import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.arti
 import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.clients.CdeClientFactory
 import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.credential.CredentialProviderError._
 import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.idbroker.IdBrokerHostsProvider
-import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.mapper.SparkCdeWorkloadMapper
+import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.mapper.{
+  SparkCdeWorkloadMapper,
+  SparkCdpPrivateWorkloadMapper
+}
 import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.workload.{
   SparkCdeWorkload,
   SparkCdeWorkloadGateway

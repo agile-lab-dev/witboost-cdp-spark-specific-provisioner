@@ -1,4 +1,4 @@
-package quartz
+package it.agilelab.provisioning.spark.workloads.provisioner.quartz
 
 import org.quartz.JobKey.jobKey
 import org.quartz.impl.matchers.GroupMatcher
@@ -14,7 +14,7 @@ class JobManager(scheduler: Scheduler) {
     jobClass: Class[_ <: Job],
     jarPath: String,
     sparkMainClassName: String
-  ): Either[JobManagerError, JobDetail] =
+  ): Either[SchedulerError, JobDetail] =
     try {
       val jobDetail = JobBuilder
         .newJob(jobClass)
@@ -27,20 +27,20 @@ class JobManager(scheduler: Scheduler) {
       Right(jobDetail)
     } catch {
       case e: SchedulerException =>
-        Left(JobSchedulerError(s"SchedulerException while creating job: ${e.getMessage}"))
+        Left(SchedulerError(s"SchedulerException while creating job: ${e.getMessage}"))
       case _: Throwable          =>
-        Left(JobUnexpectedError)
+        Left(SchedulerError("Unexpected error while creating job."))
     }
 
-  def deleteJob(jobName: String, jobGroup: String): Either[JobManagerError, Boolean] =
+  def deleteJob(jobName: String, jobGroup: String): Either[SchedulerError, Boolean] =
     try {
       val res = scheduler.deleteJob(jobKey(jobName, jobGroup))
       Right(res)
     } catch {
       case e: SchedulerException =>
-        Left(JobSchedulerError(s"SchedulerException while deleting job: ${e.getMessage}"))
-      case _                     =>
-        Left(JobUnexpectedError)
+        Left(SchedulerError(s"SchedulerException while deleting job: ${e.getMessage}"))
+      case _: Throwable          =>
+        Left(SchedulerError("Unexpected error while deleting job."))
     }
 
   def jobExists(jobName: String, jobGroup: String): Boolean = {

@@ -17,12 +17,12 @@ image:
 
 # -- service account nme
 serviceAccount:
-  create: true
+  create: false
   # -- The AWS role arn that will be assumed
   roleArn: asd
 
 # -- the name of an existing serviceAccount
-existingServiceAccount:
+existingServiceAccount: default
 
 # -- the number of pod replicas
 replicas: 1
@@ -32,6 +32,25 @@ readinessProbe: {}
 
 # -- liveliness probe spec
 livenessProbe: {}
+
+# -- Cloudera private mode
+cdpPrivate:
+  enabled: true
+  # -- This is livy configuration block
+  livy:
+    url: http://livy-url:8998
+    host: livy-url
+    port: 8998
+    # -- This configuration allows you to override the quartz.properties file 
+    quartzPropsOverride:
+  kerberos:
+    # -- This kerberos realm
+    realm:
+    # -- This configuration allows you to override the krb5.conf file
+    krb5Override:
+    # -- This configuration allows you to override the jaas.conf file
+    jaasOverride:
+
 
 # -- security context spec
 securityContext:
@@ -47,3 +66,9 @@ configOverride:
 
 # -- This configuration allows you to override the logback.xml file
 logbackOverride:
+
+
+# Custom Root CA configuration
+customRootCA:
+  # -- If this option is enabled, the chart will load the custom CA from a secret with key `cdp-private-impala-custom-ca`. The CA is expected to be in a format compatible with `keytool` utility (PEM works fine).
+  enabled: true

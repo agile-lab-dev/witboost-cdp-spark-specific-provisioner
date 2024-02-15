@@ -1,9 +1,9 @@
 package it.agilelab.provisioning.spark.workloads.provisioner.quartz.embedded.scheduler
 
+import it.agilelab.provisioning.spark.workloads.provisioner.quartz.{ JobManager, SchedulerError }
 import org.quartz._
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.funsuite.AnyFunSuite
-import quartz.{ JobManager, JobSchedulerError }
 
 import java.util.Collections
 import scala.jdk.CollectionConverters._
@@ -58,9 +58,9 @@ class JobManagerTest extends AnyFunSuite with MockFactory {
     result match {
       case Left(error) =>
         error match {
-          case jobSchedulerError: JobSchedulerError =>
+          case jobSchedulerError: SchedulerError =>
             assert(jobSchedulerError.message == "SchedulerException while deleting job: Test Exception")
-          case _                                    =>
+          case _                                 =>
             fail("Expected JobSchedulerError")
         }
       case Right(_)    =>

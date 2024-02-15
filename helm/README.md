@@ -14,9 +14,16 @@ A Helm chart for Kubernetes
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| cdpPrivate | object | `{"enabled":true,"kerberos":{"jaasOverride":null,"krb5Override":null,"realm":null},"livy":{"host":"livy-url","port":8998,"quartzPropsOverride":null,"url":"http://livy-url:8998"}}` | Cloudera private mode |
+| cdpPrivate.kerberos.jaasOverride | string | `nil` | This configuration allows you to override the jaas.conf file |
+| cdpPrivate.kerberos.krb5Override | string | `nil` | This configuration allows you to override the krb5.conf file |
+| cdpPrivate.kerberos.realm | string | `nil` | This kerberos realm |
+| cdpPrivate.livy | object | `{"host":"livy-url","port":8998,"quartzPropsOverride":null,"url":"http://livy-url:8998"}` | This is livy configuration block |
+| cdpPrivate.livy.quartzPropsOverride | string | `nil` | This configuration allows you to override the quartz.properties file  |
 | configOverride | string | `nil` | This configuration allows you to override the application.yaml file |
+| customRootCA.enabled | bool | `true` | If this option is enabled, the chart will load the custom CA from a secret with key `cdp-private-impala-custom-ca`. The CA is expected to be in a format compatible with `keytool` utility (PEM works fine). |
 | dockerRegistrySecretName | string | `"regcred"` | Docker Registry Secret name used to access a private repo |
-| existingServiceAccount | string | `nil` | the name of an existing serviceAccount |
+| existingServiceAccount | string | `"default"` | the name of an existing serviceAccount |
 | image.pullPolicy | string | `"Always"` | The imagePullPolicy for a container and the tag of the image affect when the kubelet attempts to pull (download) the specified image. |
 | image.registry | string | `"registry.gitlab.com/agilefactory/witboost.mesh/provisioning/cdp-refresh/witboost.mesh.provisioning.workload.cdp.spark"` | Image repository |
 | image.tag | string | `"latest"` | Image tag |
@@ -27,7 +34,7 @@ A Helm chart for Kubernetes
 | replicas | int | `1` | the number of pod replicas |
 | resources | object | `{}` | resources spec |
 | securityContext | object | `{"allowPrivilegeEscalation":false,"runAsNonRoot":true,"runAsUser":1001}` | security context spec |
-| serviceAccount | object | `{"create":true,"roleArn":"asd"}` | service account nme |
+| serviceAccount | object | `{"create":false,"roleArn":"asd"}` | service account nme |
 | serviceAccount.roleArn | string | `"asd"` | The AWS role arn that will be assumed |
 
 ----------------------------------------------

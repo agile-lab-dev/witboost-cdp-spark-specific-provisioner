@@ -9,7 +9,7 @@ import it.agilelab.provisioning.mesh.self.service.core.gateway.ComponentGatewayE
 import it.agilelab.provisioning.mesh.self.service.core.model.ProvisionCommand
 import it.agilelab.provisioning.spark.workload.core.models.DpCdp
 import it.agilelab.provisioning.spark.workload.core.{ SparkCde, SparkWorkloadResponse }
-import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.mapper.SparkCdeWorkloadMapper
+import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.mapper.{ SparkCdeWorkloadMapper }
 import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.workload.{
   SparkCdeWorkload,
   SparkCdeWorkloadGateway

@@ -25,7 +25,7 @@ import it.agilelab.provisioning.spark.workloads.provisioner.app.api.mapping.{
 }
 import it.agilelab.provisioning.spark.workloads.provisioner.app.api.validate.CdeValidationErrors
 
-class SpecificProvisionerHandler(
+class SpecificProvisionerHandlerCde(
   provisioner: ProvisionerController[DpCdp, SparkCde, CdpIamPrincipals]
 ) extends Handler[IO] {
 

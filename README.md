@@ -100,7 +100,7 @@ This is a multi module sbt project:
 * **core**: Contains model case classes and shared logic among the projects
 * **service**: Contains the Provisioner Service logic. This is the module on which we provision the workload.
 
-See [HLD documentation](docs/cdpPublic/HLD.md)  for more information about the logic of this project.
+See [CDP public HLD documentation](docs/cdpPublic/HLD.md) or [CDP private HLD documentation](docs/cdpPrivate/HLD.md) for more information about the logic of this project.
 
 ## Running
 
@@ -119,27 +119,9 @@ Most application configurations are handled with the Typesafe Config library. Yo
 
 ### Environment Variables
 
-Before running the application, you need to set the following environment variables:
+If you are using Cloudera Data Platform (CDP) Private Cloud Base follow the instructions in [configuration_private.md](docs%2Fconfiguration_private.md).
+If, otherwise, you prefer to configure the provisioner to communicate with Cloudera Data Engeneering (CDE) read the file [configuration_public.md](docs%2Fconfiguration_public.md).
 
-```bash
-export AWS_REGION=<Your AWS_REGION>
-export AWS_ACCESS_KEY_ID=<Your AWS_ACCESS_KEY_ID>
-export AWS_SECRET_ACCESS_KEY=<Your AWS_SECRET_ACCESS_KEY>
-export AWS_SESSION_TOKEN=<Your AWS_SESSION_TOKEN>
-```
-
-```bash
-export CDP_ACCESS_KEY_ID=<Your CDP_ACCESS_KEY_ID>
-export CDP_PRIVATE_KEY=<Your CDP_PRIVATE_KEY>
-```
-
-```bash
-export CDP_DEPLOY_ROLE_USER=<Your CDP workload user>
-export CDP_DEPLOY_ROLE_PASSWORD=<Your CDP workload password>
-```
-
-Note: CDP_ACCESS_KEY_ID and CDP_PRIVATE_KEY can be generated on the CDP in Cloudera Management Console in the User Management section.
-CDP_DEPLOY_ROLE_USER and CDP_DEPLOY_ROLE_PASSWORD can be generated in the same tab setting the Workload password.
 
 ## Deploying
 
@@ -149,9 +131,6 @@ This microservice is meant to be deployed to a Kubernetes cluster.
 
 This project is available under the [Apache License, Version 2.0](https://opensource.org/licenses/Apache-2.0); see [LICENSE](LICENSE) for full details.
 
-## Tech debt
-
-* Improve code coverage
 
 ## About us
 

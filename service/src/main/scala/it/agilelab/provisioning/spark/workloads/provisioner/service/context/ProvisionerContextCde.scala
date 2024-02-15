@@ -20,7 +20,7 @@ import it.agilelab.provisioning.spark.workloads.provisioner.service.repository.{
   MemoryStateRepository
 }
 
-final case class ProvisionerContext(
+final case class ProvisionerContextCde(
   domainRepository: Repository[Domain, String, Unit],
   stateRepo: Repository[ProvisioningStatus, String, Unit],
   cdpDeClient: CdpDeClient,
@@ -29,9 +29,9 @@ final case class ProvisionerContext(
   cdeClusterClientFactory: CdeClientFactory
 )
 
-object ProvisionerContext {
+object ProvisionerContextCde {
 
-  def init(conf: Conf): Either[ContextError, ProvisionerContext] =
+  def init(conf: Conf): Either[ContextError, ProvisionerContextCde] =
     for {
       cdpDeClient   <- CdpDeClient.defaultWithAudit().leftMap(e => ClientError("CdpDeClient", e))
       cdpDlClient   <- CdpDlClient.defaultWithAudit().leftMap(e => ClientError("CdpDlClient", e))
@@ -39,7 +39,7 @@ object ProvisionerContext {
       secretGateway <- SecretsGateway.defaultWithAudit().leftMap(e => ClientError("SecretsGateway", e))
       stateRepo      = new MemoryStateRepository()
       domainRepo     = new ConfigDomainRepository(conf)
-    } yield ProvisionerContext(
+    } yield ProvisionerContextCde(
       domainRepo,
       stateRepo,
       cdpDeClient,

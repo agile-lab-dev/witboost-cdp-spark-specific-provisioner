@@ -21,13 +21,11 @@ import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.arti
 import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.idbroker.IdBrokerHostsProvider
 import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.workload.SparkCdeWorkload
 
-import java.security.MessageDigest
-
 class SparkCdeWorkloadMapper(
   cdpDeClient: CdpDeClient,
   idBrokerHostsProvider: IdBrokerHostsProvider,
   artifactoryGateway: ArtifactoryGateway
-) {
+) extends SparkWorkloadMapper {
   def map(
     dataProduct: DataProduct[DpCdp],
     workload: Workload[SparkCde]
@@ -162,23 +160,6 @@ class SparkCdeWorkloadMapper(
         )
     }
 
-  private def defineResourceName(prefix: String, jobName: String): String =
-    s"$prefix-${md5(jobName)}"
-
-  private def createFileResourceReq(resourceName: String): CreateResourceReq = {
-    val res = Resource.filesResource(resourceName)
-    CreateResourceReq(res.name, res.`type`, res.retentionPolicy, None)
-  }
-
-  private def createEnvResourceReq(
-    resourceName: String,
-    pyVersion: String,
-    pypiMirror: Option[String]
-  ): CreateResourceReq = {
-    val res = Resource.environmentResource(resourceName, pyVersion, pypiMirror)
-    CreateResourceReq(res.name, res.`type`, res.retentionPolicy, Some(res.pythonEnvironment))
-  }
-
   def uploadFileReq(
     resource: String,
     app: String,
@@ -196,15 +177,5 @@ class SparkCdeWorkloadMapper(
           }
       }
       .sequence
-
-  private def destArtifactPath(path: String): String =
-    path.split("/").last
-
-  private def md5(value: String): String =
-    MessageDigest
-      .getInstance("MD5")
-      .digest(value.getBytes("UTF-8"))
-      .map("%02x".format(_))
-      .mkString
 
 }

@@ -12,7 +12,7 @@ import it.agilelab.provisioning.spark.workload.core.{ JobConfig, JobScheduler }
 import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway
 import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.artifactory.ArtifactoryGateway
 import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.idbroker.IdBrokerHostsProvider
-import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.mapper.SparkCdeWorkloadMapper
+import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.mapper.{ SparkCdeWorkloadMapper }
 import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.workload.SparkCdeWorkload
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.funsuite.AnyFunSuite

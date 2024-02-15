@@ -17,3 +17,21 @@ data:
   {{- else -}}
   {{- .Files.Get "files/logback.xml" | nindent 4 }}
   {{ end }}
+  krb5.conf: |
+  {{- if .Values.cdpPrivate.kerberos.krb5Override -}}
+  {{- .Values.cdpPrivate.kerberos.krb5Override | nindent 4 }}
+  {{- else -}}
+  {{- .Files.Get "files/krb5.conf" | nindent 4 }}
+  {{ end }}
+  jaas.conf: |
+  {{- if .Values.cdpPrivate.kerberos.jaasOverride -}}
+  {{- .Values.cdpPrivate.kerberos.jaasOverride | nindent 4 }}
+  {{- else -}}
+  {{- .Files.Get "files/jaas.conf" | nindent 4 }}
+  {{ end }}
+  quartz.properties: |
+  {{- if .Values.cdpPrivate.livy.quartzPropsOverride -}}
+  {{- .Values.cdpPrivate.livy.quartzPropsOverride | nindent 4 }}
+  {{- else -}}
+  {{- .Files.Get "files/quartz.properties" | nindent 4 }}
+  {{ end }}

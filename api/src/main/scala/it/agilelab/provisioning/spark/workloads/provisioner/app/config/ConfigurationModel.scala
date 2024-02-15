@@ -11,4 +11,7 @@ trait ConfigurationModel {
   val NETWORKING_HTTPSERVER_INTERFACE: String = s"$networking.$httpServer.$interface"
   val NETWORKING_HTTPSERVER_PORT: String      = s"$networking.$httpServer.$port"
 
+  val CLOUDERA_MODE: String = s"cloudera-mode"
+  val SCHEDULER_PROP        = s"scheduler-prop"
+
 }

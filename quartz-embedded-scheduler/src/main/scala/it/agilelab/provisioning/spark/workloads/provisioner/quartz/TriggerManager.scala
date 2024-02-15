@@ -1,4 +1,4 @@
-package quartz
+package it.agilelab.provisioning.spark.workloads.provisioner.quartz
 
 import org.quartz._
 
@@ -11,7 +11,7 @@ class TriggerManager() {
     cronExpression: Option[String] = None,
     startDate: Date,
     endDate: Date
-  ): Either[TriggerManagerError, Trigger] =
+  ): Either[SchedulerError, Trigger] =
     try {
 
       val triggerBuilder = TriggerBuilder
@@ -28,8 +28,8 @@ class TriggerManager() {
       Right(triggerWithSchedule.getOrElse(triggerBuilder.build()))
     } catch {
       case e: SchedulerException =>
-        Left(TriggerSchedulerError(s"SchedulerException while creating trigger: ${e.getMessage}"))
-      case _: Throwable          =>
-        Left(TriggerUnexpectedError)
+        Left(SchedulerError(s"SchedulerException while creating trigger: ${e.getMessage}"))
+      case e: Throwable          =>
+        Left(SchedulerError(s"Unexpected error while creating trigger. ${e.getMessage}"))
     }
 }

@@ -3,16 +3,11 @@ package it.agilelab.provisioning.spark.workloads.provisioner.service.gateway
 import it.agilelab.provisioning.commons.client.cdp.de.cluster.model.base.File.{ apply => _ }
 import it.agilelab.provisioning.mesh.self.service.api.model.Component.Workload
 import it.agilelab.provisioning.mesh.self.service.api.model.ProvisionRequest
-import it.agilelab.provisioning.mesh.self.service.core.gateway.{
-  ComponentGateway,
-  ComponentGatewayError,
-  PermissionlessComponentGateway
-}
+import it.agilelab.provisioning.mesh.self.service.core.gateway.{ ComponentGatewayError, PermissionlessComponentGateway }
 import it.agilelab.provisioning.mesh.self.service.core.model.ProvisionCommand
-import io.circe.Json
 import it.agilelab.provisioning.spark.workload.core.models.DpCdp
 import it.agilelab.provisioning.spark.workload.core.{ SparkCde, SparkWorkloadResponse }
-import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.mapper.SparkCdeWorkloadMapper
+import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.mapper.{ SparkCdeWorkloadMapper }
 import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.workload.SparkCdeWorkloadGateway
 
 class CdeSparkWorkloadGateway(
