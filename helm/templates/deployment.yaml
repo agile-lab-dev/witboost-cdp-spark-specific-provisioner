@@ -129,20 +129,22 @@ spec:
             {{- if .Values.cdpPrivate.enabled }}
             - name: CLOUDERA_MODE
               value: private
-            - name: LIVY_HOST
-              value: {{ .Values.cdpPrivate.livy.host }}
             - name: LIVY_URL
               value: {{ .Values.cdpPrivate.livy.url | quote }}
-            - name: LIVY_PORT
-              value: {{ .Values.cdpPrivate.livy.port | quote }}
             - name: SCHEDULER_PROP
               value: /opt/docker/etc/configs/quartz.properties
             - name: KRB5_CONF_PATH
               value: /opt/docker/etc/configs/krb5.conf
             - name: KRB_JAAS_CONF_PATH
               value: /opt/docker/etc/configs/jaas.conf
-            - name: CDP_PRIVATE_REALM
-              value: {{ .Values.cdpPrivate.kerberos.realm }}
+            - name: HDFS_NAMENODE0
+              value: {{ .Values.cdpPrivate.hdfs.nn1 }}
+            - name: HDFS_NAMENODE1
+              value: {{ .Values.cdpPrivate.hdfs.nn2 }}
+            - name: WEBHDFS_PORT
+              value: {{ .Values.cdpPrivate.hdfs.webhdfsPort | quote }}
+            - name: WEBHDFS_PROTOCOL
+              value: {{ .Values.cdpPrivate.hdfs.webhdfsProtocol}}
             {{- else }}
             - name: CDP_ACCESS_KEY_ID
               valueFrom:

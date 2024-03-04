@@ -5,8 +5,8 @@ import it.agilelab.provisioning.mesh.self.service.api.model.Component.Workload
 import it.agilelab.provisioning.mesh.self.service.api.model.ProvisionRequest
 import it.agilelab.provisioning.mesh.self.service.core.gateway.{ ComponentGatewayError, PermissionlessComponentGateway }
 import it.agilelab.provisioning.mesh.self.service.core.model.ProvisionCommand
-import it.agilelab.provisioning.spark.workload.core.models.DpCdp
-import it.agilelab.provisioning.spark.workload.core.{ SparkCdpPrivate, SparkWorkloadResponse }
+import it.agilelab.provisioning.spark.workloads.core.{ SparkCdpPrivate, SparkWorkloadResponse }
+import it.agilelab.provisioning.spark.workloads.core.models.DpCdp
 import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.mapper.SparkCdpPrivateWorkloadMapper
 import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.workload.SparkCdpPrivateWorkloadGateway
 

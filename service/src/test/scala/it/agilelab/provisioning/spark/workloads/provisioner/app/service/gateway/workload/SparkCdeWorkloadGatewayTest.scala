@@ -15,7 +15,7 @@ import it.agilelab.provisioning.commons.client.cdp.de.cluster.model.base.{ Job, 
 import it.agilelab.provisioning.commons.client.cdp.de.cluster.model.request._
 import it.agilelab.provisioning.commons.client.cdp.de.cluster.model.response.GetJobRes
 import it.agilelab.provisioning.commons.http.HttpErrors.{ GenericErr, ServerErr }
-import it.agilelab.provisioning.spark.workload.core.SparkWorkloadResponse
+import it.agilelab.provisioning.spark.workloads.core.SparkWorkloadResponse
 import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway
 import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.artifactory.ArtifactoryGateway
 import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.clients.CdeClientFactory

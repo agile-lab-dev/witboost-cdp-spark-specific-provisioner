@@ -1,4 +1,4 @@
-package it.agilelab.provisioning.spark.workload.core.context
+package it.agilelab.provisioning.spark.workloads.core.context
 
 import it.agilelab.provisioning.commons.config.ConfError
 

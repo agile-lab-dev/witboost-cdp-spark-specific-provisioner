@@ -8,9 +8,9 @@ import it.agilelab.provisioning.commons.client.cdp.de.CdpDeClient
 import it.agilelab.provisioning.commons.validator.ValidationFail
 import it.agilelab.provisioning.mesh.self.service.api.model.Component._
 import it.agilelab.provisioning.mesh.self.service.api.model.{ DataProduct, ProvisionRequest }
-import it.agilelab.provisioning.spark.workload.core.SparkCde._
-import it.agilelab.provisioning.spark.workload.core.models.DpCdp
-import it.agilelab.provisioning.spark.workload.core.{ JobConfig, SparkCde }
+import it.agilelab.provisioning.spark.workloads.core.{ JobConfig, SparkCde }
+import it.agilelab.provisioning.spark.workloads.core.SparkCde._
+import it.agilelab.provisioning.spark.workloads.core.models.DpCdp
 import it.agilelab.provisioning.spark.workloads.provisioner.app.api.validate
 import it.agilelab.provisioning.spark.workloads.provisioner.app.api.validate.CdeValidationErrors
 import it.agilelab.provisioning.spark.workloads.provisioner.app.api.validate.SparkCdeValidator.validator

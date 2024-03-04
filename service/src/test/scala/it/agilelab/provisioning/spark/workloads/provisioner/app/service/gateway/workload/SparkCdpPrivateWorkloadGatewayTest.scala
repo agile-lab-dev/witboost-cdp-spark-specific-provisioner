@@ -1,6 +1,6 @@
 package it.agilelab.provisioning.spark.workloads.provisioner.app.service.gateway.workload
 import it.agilelab.provisioning.commons.client.cdp.de.cluster.model.base._
-import it.agilelab.provisioning.spark.workload.core.SparkWorkloadResponse
+import it.agilelab.provisioning.spark.workloads.core.SparkWorkloadResponse
 import it.agilelab.provisioning.spark.workloads.provisioner.quartz.{ SchedulerError, SchedulingService }
 import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.workload.{
   SparkCdpPrivateWorkload,
@@ -22,6 +22,7 @@ class SparkCdpPrivateWorkloadGatewayTest extends AnyFunSuite with MockFactory wi
     val sparkCdpPrivateWorkload = SparkCdpPrivateWorkload(
       "my-dp-domain",
       "my-dp-name",
+      "default",
       Job.spark(
         "y",
         "y",
@@ -56,7 +57,7 @@ class SparkCdpPrivateWorkloadGatewayTest extends AnyFunSuite with MockFactory wi
     val dateRes = new Date()
 
     (schedulingService.scheduleJob _)
-      .expects(*, *, *, *, *, *, *)
+      .expects(*, *, *)
       .returning(Right(dateRes))
       .once()
 
@@ -105,6 +106,7 @@ class SparkCdpPrivateWorkloadGatewayTest extends AnyFunSuite with MockFactory wi
     val sparkCdpPrivateWorkload = SparkCdpPrivateWorkload(
       "my-dp-domain",
       "my-dp-name",
+      "default",
       Job.spark(
         "y",
         "y",
@@ -138,7 +140,7 @@ class SparkCdpPrivateWorkloadGatewayTest extends AnyFunSuite with MockFactory wi
 
     val errorMessage = "Scheduling failed due to XYZ reason"
     (schedulingService.scheduleJob _)
-      .expects(*, *, *, *, *, *, *)
+      .expects(*, *, *)
       .returning(Left(SchedulerError(errorMessage)))
       .once()
 
@@ -153,6 +155,7 @@ class SparkCdpPrivateWorkloadGatewayTest extends AnyFunSuite with MockFactory wi
     val sparkCdpPrivateWorkload = SparkCdpPrivateWorkload(
       "my-dp-domain",
       "my-dp-name",
+      "default",
       Job.spark(
         "y",
         "y",
@@ -234,6 +237,7 @@ class SparkCdpPrivateWorkloadGatewayTest extends AnyFunSuite with MockFactory wi
     val sparkCdpPrivateWorkload = SparkCdpPrivateWorkload(
       "my-dp-domain",
       "my-dp-name",
+      "default",
       Job.spark(
         "y",
         "y",

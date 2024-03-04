@@ -17,8 +17,8 @@ import it.agilelab.provisioning.commons.principalsmapping.CdpIamPrincipals
 import it.agilelab.provisioning.mesh.self.service.api.controller.ProvisionerController
 import it.agilelab.provisioning.mesh.self.service.api.model.ApiResponse.Status
 import it.agilelab.provisioning.mesh.self.service.api.model.{ ApiError, ApiRequest, ApiResponse }
-import it.agilelab.provisioning.spark.workload.core.SparkCde
-import it.agilelab.provisioning.spark.workload.core.models.DpCdp
+import it.agilelab.provisioning.spark.workloads.core.SparkCde
+import it.agilelab.provisioning.spark.workloads.core.models.DpCdp
 import it.agilelab.provisioning.spark.workloads.provisioner.app.api.mapping.{
   ProvisioningStatusMapper,
   ValidationErrorMapper

@@ -9,14 +9,15 @@ import it.agilelab.provisioning.api.generated.definitions.{
   ReverseProvisioningRequest,
   SystemError,
   UpdateAclRequest,
+  ValidationError,
   ValidationResult
 }
 import it.agilelab.provisioning.api.generated.{ Handler, Resource }
 import it.agilelab.provisioning.commons.principalsmapping.CdpIamPrincipals
 import it.agilelab.provisioning.mesh.self.service.api.controller.ProvisionerController
 import it.agilelab.provisioning.mesh.self.service.api.model.{ ApiError, ApiRequest }
-import it.agilelab.provisioning.spark.workload.core.SparkCdpPrivate
-import it.agilelab.provisioning.spark.workload.core.models.DpCdp
+import it.agilelab.provisioning.spark.workloads.core.SparkCdpPrivate
+import it.agilelab.provisioning.spark.workloads.core.models.DpCdp
 import it.agilelab.provisioning.spark.workloads.provisioner.app.api.mapping.{
   ProvisioningStatusMapper,
   ValidationErrorMapper
@@ -38,11 +39,17 @@ class SpecificProvisionerHandlerCdpPrivate(
     body: ProvisioningRequest
   ): IO[Resource.ProvisionResponse] = IO {
     provisioner.provision(ApiRequest.ProvisioningRequest(body.descriptor)) match {
-      case Left(error: ApiError.SystemError)     =>
+      case Left(error: ApiError.ValidationError) if error.errors.exists(_.contains("DecodeErr")) =>
+        Resource.ProvisionResponse.BadRequest(
+          RequestValidationError(
+            Vector("Unable to decode the workload. Please check that all required fields have been provided")
+          )
+        )
+      case Left(error: ApiError.SystemError)                                                     =>
         Resource.ProvisionResponse.InternalServerError(SystemError(error.error))
-      case Left(error: ApiError.ValidationError) =>
+      case Left(error: ApiError.ValidationError)                                                 =>
         Resource.ProvisionResponse.BadRequest(RequestValidationError(error.errors.toVector))
-      case Right(status)                         =>
+      case Right(status)                                                                         =>
         Resource.ProvisionResponse.Ok(ProvisioningStatusMapper.from(status))
 
     }
@@ -58,11 +65,17 @@ class SpecificProvisionerHandlerCdpPrivate(
     body: ProvisioningRequest
   ): IO[Resource.UnprovisionResponse] = IO {
     provisioner.unprovision(ApiRequest.ProvisioningRequest(body.descriptor)) match {
-      case Left(error: ApiError.ValidationError) =>
+      case Left(error: ApiError.ValidationError) if error.errors.exists(_.contains("DecodeErr")) =>
+        Resource.UnprovisionResponse.BadRequest(
+          RequestValidationError(
+            Vector("Unable to decode the workload. Please check that all required fields have been provided")
+          )
+        )
+      case Left(error: ApiError.ValidationError)                                                 =>
         Resource.UnprovisionResponse.BadRequest(RequestValidationError(error.errors.toVector))
-      case Left(error: ApiError.SystemError)     =>
+      case Left(error: ApiError.SystemError)                                                     =>
         Resource.UnprovisionResponse.InternalServerError(SystemError(error.error))
-      case Right(status)                         =>
+      case Right(status)                                                                         =>
         Resource.UnprovisionResponse.Ok(ProvisioningStatusMapper.from(status))
     }
   }
@@ -80,7 +93,23 @@ class SpecificProvisionerHandlerCdpPrivate(
       case Left(error: ApiError.SystemError) =>
         Resource.ValidateResponse.InternalServerError(SystemError(error.error))
       case Right(result)                     =>
-        Resource.ValidateResponse.Ok(ValidationResult(result.valid, result.error.map(ValidationErrorMapper.from)))
+        if (
+          !result.valid && result.error.flatMap { error =>
+            error.errors.find(_.contains("DecodeErr"))
+          }.isDefined
+        )
+          Resource.ValidateResponse.Ok(
+            ValidationResult(
+              result.valid,
+              Some(
+                ValidationError(
+                  Vector("Unable to decode the workload. Please check that all required fields have been provided")
+                )
+              )
+            )
+          )
+        else
+          Resource.ValidateResponse.Ok(ValidationResult(result.valid, result.error.map(ValidationErrorMapper.from)))
     }
   }
 

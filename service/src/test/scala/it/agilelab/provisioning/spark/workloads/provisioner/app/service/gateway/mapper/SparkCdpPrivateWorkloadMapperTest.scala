@@ -1,13 +1,13 @@
 package it.agilelab.provisioning.spark.workloads.provisioner.app.service.gateway.mapper
 
-import cats.parse.strings.Json
 import it.agilelab.provisioning.commons.client.cdp.de.cluster.model.base.{ Job, Schedule }
 import it.agilelab.provisioning.mesh.self.service.api.model.DataProduct
 import it.agilelab.provisioning.mesh.self.service.api.model.Component.Workload
 import it.agilelab.provisioning.mesh.self.service.core.gateway.ComponentGatewayError
-import it.agilelab.provisioning.spark.workload.core.{ JobConfig, JobScheduler, SparkCdpPrivate }
-import it.agilelab.provisioning.spark.workload.core.SparkCdpPrivate.SparkCdpPrivateJob
-import it.agilelab.provisioning.spark.workload.core.models.DpCdp
+import it.agilelab.provisioning.spark.workloads.core.{ JobConfig, JobScheduler, SparkCdpPrivate }
+import it.agilelab.provisioning.spark.workloads.core.SparkCdpPrivate.SparkCdpPrivateJob
+import it.agilelab.provisioning.spark.workloads.core.context.cdpPrivate.CustomHttpClient
+import it.agilelab.provisioning.spark.workloads.core.models.DpCdp
 import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.mapper.SparkCdpPrivateWorkloadMapper
 import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.workload.SparkCdpPrivateWorkload
 import org.scalamock.scalatest.MockFactory
@@ -15,7 +15,7 @@ import org.scalatest.funsuite.AnyFunSuite
 
 class SparkCdpPrivateWorkloadMapperTest extends AnyFunSuite with MockFactory {
 
-  val sparkCdpPrivateJobMapper = new SparkCdpPrivateWorkloadMapper()
+  private val sparkCdpPrivateJobMapper: SparkCdpPrivateWorkloadMapper = new SparkCdpPrivateWorkloadMapper()
 
   test("map spark workload") {
 
@@ -39,9 +39,10 @@ class SparkCdpPrivateWorkloadMapperTest extends AnyFunSuite with MockFactory {
       version = "0.0.1",
       specific = SparkCdpPrivateJob(
         jobName = "my-job-name",
-        jar = "folder://folder/jarfile.jar",
+        jar = "hdfs://localhost:8020/jarfile.jar",
         className = "com.MyClass",
-        jobConfig = None
+        jobConfig = None,
+        queue = "default"
       )
     )
 
@@ -51,10 +52,11 @@ class SparkCdpPrivateWorkloadMapperTest extends AnyFunSuite with MockFactory {
       SparkCdpPrivateWorkload(
         domain = "my-dp-domain",
         dataProduct = "my-dp-name",
+        queue = "default",
         job = Job.spark(
           name = "my-job-name",
           resource = "mainres-7f59fed658cdded64d35590c3c86003d",
-          filePath = "folder://folder/jarfile.jar",
+          filePath = "hdfs://localhost:8020/jarfile.jar",
           className = "com.MyClass",
           jars = None,
           args = None,
@@ -93,7 +95,7 @@ class SparkCdpPrivateWorkloadMapperTest extends AnyFunSuite with MockFactory {
       version = "0.0.1",
       specific = SparkCdpPrivateJob(
         jobName = "my-job-name",
-        jar = "folder://folder/jarfile.jar",
+        jar = "hdfs://localhost:8020/jarfile.jar",
         className = "com.MyClass",
         jobConfig = Some(
           JobConfig(
@@ -113,7 +115,8 @@ class SparkCdpPrivateWorkloadMapperTest extends AnyFunSuite with MockFactory {
             logLevel = None,
             conf = None
           )
-        )
+        ),
+        queue = "default"
       )
     )
 
@@ -126,7 +129,7 @@ class SparkCdpPrivateWorkloadMapperTest extends AnyFunSuite with MockFactory {
         job = Job.spark(
           name = "my-job-name",
           resource = "mainres-7f59fed658cdded64d35590c3c86003d",
-          filePath = "folder://folder/jarfile.jar",
+          filePath = "hdfs://localhost:8020/jarfile.jar",
           className = "com.MyClass",
           jars = Some(Seq("dfile1.jar", "dfile2.jar")),
           args = Some(Seq("my", "args")),
@@ -139,7 +142,8 @@ class SparkCdpPrivateWorkloadMapperTest extends AnyFunSuite with MockFactory {
           schedule = Some(
             Schedule(enabled = true, Some(""), None, None, None, None, Some("x"), Some("y"), Some("5 * * * *"), None)
           )
-        )
+        ),
+        queue = "default"
       )
     )
 

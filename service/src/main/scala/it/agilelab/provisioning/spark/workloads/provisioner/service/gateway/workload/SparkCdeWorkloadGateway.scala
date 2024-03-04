@@ -3,7 +3,7 @@ package it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.wor
 import cats.implicits._
 import it.agilelab.provisioning.commons.client.cdp.de.cluster.model.request._
 import it.agilelab.provisioning.mesh.self.service.core.gateway.ComponentGatewayError
-import it.agilelab.provisioning.spark.workload.core.SparkWorkloadResponse
+import it.agilelab.provisioning.spark.workloads.core.SparkWorkloadResponse
 import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.clients.CdeClientFactory
 
 class SparkCdeWorkloadGateway(cdeClientFactory: CdeClientFactory) extends SparkWorkloadGateway[SparkCdeWorkload] {

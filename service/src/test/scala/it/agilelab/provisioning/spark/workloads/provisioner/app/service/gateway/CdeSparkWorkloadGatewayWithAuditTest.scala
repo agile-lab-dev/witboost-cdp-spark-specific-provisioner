@@ -6,8 +6,8 @@ import it.agilelab.provisioning.mesh.self.service.api.model.Component.Workload
 import it.agilelab.provisioning.mesh.self.service.api.model.{ DataProduct, ProvisionRequest }
 import it.agilelab.provisioning.mesh.self.service.core.gateway.ComponentGatewayError
 import it.agilelab.provisioning.mesh.self.service.core.model.ProvisionCommand
-import it.agilelab.provisioning.spark.workload.core.models.DpCdp
-import it.agilelab.provisioning.spark.workload.core.{ SparkCde, SparkWorkloadResponse }
+import it.agilelab.provisioning.spark.workloads.core.{ SparkCde, SparkWorkloadResponse }
+import it.agilelab.provisioning.spark.workloads.core.models.DpCdp
 import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.{
   CdeSparkWorkloadGateway,
   CdeSparkWorkloadGatewayWithAudit

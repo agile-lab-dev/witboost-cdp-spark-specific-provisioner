@@ -5,8 +5,8 @@ import com.comcast.ip4s.{ Host, Port }
 import com.typesafe.scalalogging.Logger
 import it.agilelab.provisioning.commons.config.Conf
 
-import it.agilelab.provisioning.spark.workload.core.context.ContextError
-import it.agilelab.provisioning.spark.workload.core.context.ContextError._
+import it.agilelab.provisioning.spark.workloads.core.context.ContextError
+import it.agilelab.provisioning.spark.workloads.core.context.ContextError._
 import it.agilelab.provisioning.spark.workloads.provisioner.app.config.{
   ApplicationConfiguration,
   FrameworkDependencies,
@@ -61,7 +61,7 @@ object Main extends IOApp {
       case clientErr: ClientError      => logger.error(clientErr.client, clientErr.throwable)
     }
 
-  def chooseFrameworkDependenciesWithProvisioner(mode: String): IO[(FrameworkDependencies[_])] =
+  def chooseFrameworkDependenciesWithProvisioner(mode: String): IO[FrameworkDependencies[_]] =
     mode match {
       case "public"  =>
         SparkCdeProvisionerController.apply(conf) match {

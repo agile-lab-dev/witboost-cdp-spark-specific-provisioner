@@ -3,7 +3,7 @@ package it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.wor
 import cats.implicits._
 import it.agilelab.provisioning.commons.client.cdp.de.cluster.model.base.{ Job, JobDetails }
 import it.agilelab.provisioning.mesh.self.service.core.gateway.ComponentGatewayError
-import it.agilelab.provisioning.spark.workload.core.SparkWorkloadResponse
+import it.agilelab.provisioning.spark.workloads.core.SparkWorkloadResponse
 import it.agilelab.provisioning.spark.workloads.provisioner.quartz.SchedulingService
 
 import java.text.SimpleDateFormat
@@ -17,46 +17,17 @@ class SparkCdpPrivateWorkloadGateway(schedulerService: SchedulingService)
 
   def deployJob(
     sparkCdpPrivateWorkload: SparkCdpPrivateWorkload
-  ): Either[ComponentGatewayError, SparkWorkloadResponse] = {
-
-    val jobName = sparkCdpPrivateWorkload.job.name
-    val jarPath = sparkCdpPrivateWorkload.job.spark.fold("SparkJobNotFound")(_.file)
-
-    val currentDateTime = ZonedDateTime.now
-    val formatter       = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssX")
-
-    val sparkClassName          =
-      sparkCdpPrivateWorkload.job.spark.fold("SparkJobNotFound")(_.className.getOrElse("ClassNameNotFound"))
-    val cronExp: Option[String] = sparkCdpPrivateWorkload.job.schedule.flatMap(_.cronExpression)
-    val startDateString         =
-      sparkCdpPrivateWorkload.job.schedule.fold("SparkJobNotFound")(
-        _.start.getOrElse(currentDateTime.format(formatter))
-      )
-    val endDateString           =
-      sparkCdpPrivateWorkload.job.schedule.fold("SparkJobNotFound")(
-        _.end.getOrElse(currentDateTime.plusYears(20).format(formatter))
-      )
-
-    val dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX")
-    dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"))
-    val startDate  = dateFormat.parse(startDateString)
-    val endDate    = dateFormat.parse(endDateString)
-
+  ): Either[ComponentGatewayError, SparkWorkloadResponse] =
     schedulerService.scheduleJob(
-      jobName,
+      sparkCdpPrivateWorkload.job,
       sparkCdpPrivateWorkload.dataProduct,
-      jarPath,
-      sparkClassName,
-      cronExp,
-      startDate,
-      endDate
+      sparkCdpPrivateWorkload.queue
     ) match {
       case Left(error)       =>
         Left(ComponentGatewayError(error.message))
       case Right(date: Date) =>
         Right(SparkWorkloadResponse.create(mapJobToJobDetails(sparkCdpPrivateWorkload.job, date)))
     }
-  }
 
   def undeployJob(
     sparkCdpPrivateWorkload: SparkCdpPrivateWorkload

@@ -1,4 +1,4 @@
-package it.agilelab.provisioning.spark.workload.core.gateway.cdp
+package it.agilelab.provisioning.spark.workloads.core.gateway.cdp
 
 import it.agilelab.provisioning.commons.client.cdp.dl.CdpDlClientError
 import it.agilelab.provisioning.commons.client.cdp.env.CdpEnvClientError

@@ -5,20 +5,24 @@ import cats.data.{ NonEmptyList, Validated }
 import it.agilelab.provisioning.commons.validator.ValidationFail
 import it.agilelab.provisioning.mesh.self.service.api.model.Component._
 import it.agilelab.provisioning.mesh.self.service.api.model.{ DataProduct, ProvisionRequest }
-import it.agilelab.provisioning.spark.workload.core.SparkCdpPrivate._
-import it.agilelab.provisioning.spark.workload.core.models.DpCdp
-import it.agilelab.provisioning.spark.workload.core.{ JobConfig, SparkCdpPrivate }
+import it.agilelab.provisioning.spark.workloads.core.{ JobConfig, SparkCdpPrivate }
+import it.agilelab.provisioning.spark.workloads.core.SparkCdpPrivate._
+import it.agilelab.provisioning.spark.workloads.core.context.cdpPrivate.CustomHttpClient
+import it.agilelab.provisioning.spark.workloads.core.models.DpCdp
 import it.agilelab.provisioning.spark.workloads.provisioner.app.api.validate.SparkCdpPrivateValidator.validator
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.funsuite.AnyFunSuite
 
 class SparkCdpPrivateValidatorTest extends AnyFunSuite with MockFactory {
 
+  private val mockHttpClient: CustomHttpClient = mock[CustomHttpClient]
+
   private val specificSpark: SparkCdpPrivateJob   = SparkCdpPrivateJob(
     jobName = "my-dm-my-dp-1-my-wl-my-dp-environment",
     jar = "folder://folder/my-jar",
     className = "my-class",
-    jobConfig = None
+    jobConfig = None,
+    queue = ""
   )
   private val workload: Workload[SparkCdpPrivate] = Workload[SparkCdpPrivate](
     id = "urn:dmb:cmp:my_dm.my_dp.1.my_wl",
@@ -42,18 +46,98 @@ class SparkCdpPrivateValidatorTest extends AnyFunSuite with MockFactory {
   )
 
   test("validate return valid with basic workload") {
-    val actual = validator().validate(ProvisionRequest(dataProduct, Some(workload)))
+
+    (mockHttpClient.executeGet _)
+      .expects(where { (client: String, url: String) =>
+        url.contains("webhdfs/v1")
+      })
+      .returning(
+        """{"FileStatus":{"accessTime":1,"blockSize":1,"childrenNum":0,"fileId":1,"group":"supergroup","length":2017859,"modificationTime":1,"owner":"hdfs","pathSuffix":"","permission":"644","replication":3,"storagePolicy":0,"type":"FILE"}}"""
+      )
+      .once()
+
+    (mockHttpClient.executeGet _)
+      .expects(where { (client: String, url: String) =>
+        url.contains("jmx?qry=Hadoop:service=NameNode,name=NameNodeStatus")
+      })
+      .returning(
+        """{"beans":[{"name":"Hadoop:service=NameNode,name=NameNameStatus","modelerType":"org.apache.hadoop.hdfs.server.namenode.NameNode","State":"active","NNRole":"NameNode","HostAndPort":"x.x.cloudera.com:8020","SecurityEnabled":true,"LastHATransitionTime":5,"BytesWithFutureGenerationStamps":0,"SlowPeersReport":null,"SlowDisksReport":null}]}"""
+      )
+      .once()
+    (mockHttpClient.executeGet _)
+      .expects(where { (client: String, url: String) =>
+        url.contains("jmx?qry=Hadoop:service=NameNode,name=NameNodeStatus")
+      })
+      .returning(
+        """{"beans":[{"name":"Hadoop:service=NameNode,name=NameNameStatus","modelerType":"org.apache.hadoop.hdfs.server.namenode.NameNode","State":"active","NNRole":"NameNode","HostAndPort":"x.x.cloudera.com:8020","SecurityEnabled":true,"LastHATransitionTime":5,"BytesWithFutureGenerationStamps":0,"SlowPeersReport":null,"SlowDisksReport":null}]}"""
+      )
+      .once()
+
+    val actual = validator(mockHttpClient).validate(ProvisionRequest(dataProduct, Some(workload)))
     assert(actual == Right(valid(ProvisionRequest(dataProduct, Some(workload)))))
   }
 
   test("validate return invalid with bad jobname") {
+
+    (mockHttpClient.executeGet _)
+      .expects(where { (client: String, url: String) =>
+        url.contains("webhdfs/v1")
+      })
+      .returning(
+        """{"FileStatus":{"accessTime":1,"blockSize":1,"childrenNum":0,"fileId":1,"group":"supergroup","length":2017859,"modificationTime":1,"owner":"hdfs","pathSuffix":"","permission":"644","replication":3,"storagePolicy":0,"type":"FILE"}}"""
+      )
+      .once()
+
+    (mockHttpClient.executeGet _)
+      .expects(where { (client: String, url: String) =>
+        url.contains("jmx?qry=Hadoop:service=NameNode,name=NameNodeStatus")
+      })
+      .returning(
+        """{"beans":[{"name":"Hadoop:service=NameNode,name=NameNameStatus","modelerType":"org.apache.hadoop.hdfs.server.namenode.NameNode","State":"active","NNRole":"NameNode","HostAndPort":"x.x.cloudera.com:8020","SecurityEnabled":true,"LastHATransitionTime":5,"BytesWithFutureGenerationStamps":0,"SlowPeersReport":null,"SlowDisksReport":null}]}"""
+      )
+      .once()
+    (mockHttpClient.executeGet _)
+      .expects(where { (client: String, url: String) =>
+        url.contains("jmx?qry=Hadoop:service=NameNode,name=NameNodeStatus")
+      })
+      .returning(
+        """{"beans":[{"name":"Hadoop:service=NameNode,name=NameNameStatus","modelerType":"org.apache.hadoop.hdfs.server.namenode.NameNode","State":"active","NNRole":"NameNode","HostAndPort":"x.x.cloudera.com:8020","SecurityEnabled":true,"LastHATransitionTime":5,"BytesWithFutureGenerationStamps":0,"SlowPeersReport":null,"SlowDisksReport":null}]}"""
+      )
+      .once()
+
     val s: SparkCdpPrivate = specificSpark.copy(jobName = "jn")
     val wl                 = workload.copy(specific = s)
-    val actual             = validator().validate(ProvisionRequest(dataProduct, Some(wl)))
+    val actual             = validator(mockHttpClient).validate(ProvisionRequest(dataProduct, Some(wl)))
     assert(actual == Right(invalidNel(ValidationFail(ProvisionRequest(dataProduct, Some(wl)), "Job name not valid"))))
   }
 
   test("validate return invalid with wrong config") {
+
+    (mockHttpClient.executeGet _)
+      .expects(where { (client: String, url: String) =>
+        url.contains("webhdfs/v1")
+      })
+      .returning(
+        """{"FileStatus":{"accessTime":1,"blockSize":1,"childrenNum":0,"fileId":1,"group":"supergroup","length":2017859,"modificationTime":1,"owner":"hdfs","pathSuffix":"","permission":"644","replication":3,"storagePolicy":0,"type":"FILE"}}"""
+      )
+      .once()
+
+    (mockHttpClient.executeGet _)
+      .expects(where { (client: String, url: String) =>
+        url.contains("jmx?qry=Hadoop:service=NameNode,name=NameNodeStatus")
+      })
+      .returning(
+        """{"beans":[{"name":"Hadoop:service=NameNode,name=NameNameStatus","modelerType":"org.apache.hadoop.hdfs.server.namenode.NameNode","State":"active","NNRole":"NameNode","HostAndPort":"x.x.cloudera.com:8020","SecurityEnabled":true,"LastHATransitionTime":5,"BytesWithFutureGenerationStamps":0,"SlowPeersReport":null,"SlowDisksReport":null}]}"""
+      )
+      .once()
+    (mockHttpClient.executeGet _)
+      .expects(where { (client: String, url: String) =>
+        url.contains("jmx?qry=Hadoop:service=NameNode,name=NameNodeStatus")
+      })
+      .returning(
+        """{"beans":[{"name":"Hadoop:service=NameNode,name=NameNameStatus","modelerType":"org.apache.hadoop.hdfs.server.namenode.NameNode","State":"active","NNRole":"NameNode","HostAndPort":"x.x.cloudera.com:8020","SecurityEnabled":true,"LastHATransitionTime":5,"BytesWithFutureGenerationStamps":0,"SlowPeersReport":null,"SlowDisksReport":null}]}"""
+      )
+      .once()
 
     val invalidJobConfig = JobConfig(
       args = None,
@@ -70,7 +154,7 @@ class SparkCdpPrivateValidatorTest extends AnyFunSuite with MockFactory {
 
     val s: SparkCdpPrivate = specificSpark.copy(jobConfig = Some(invalidJobConfig))
     val wl                 = workload.copy(specific = s)
-    val actual             = validator().validate(ProvisionRequest(dataProduct, Some(wl)))
+    val actual             = validator(mockHttpClient).validate(ProvisionRequest(dataProduct, Some(wl)))
 
     val expectedErrors = NonEmptyList
       .of(
@@ -81,6 +165,108 @@ class SparkCdpPrivateValidatorTest extends AnyFunSuite with MockFactory {
         "If specified, num executors must be a positive integer"
       )
       .map(msg => ValidationFail(ProvisionRequest(dataProduct, Some(wl)), msg))
+
+    val expected = Right(Validated.invalid(expectedErrors))
+
+    assert(actual == expected)
+  }
+
+  test("validate return invalid with no active hdfs name node") {
+
+    (mockHttpClient.executeGet _)
+      .expects(where { (client: String, url: String) =>
+        url.contains("jmx?qry=Hadoop:service=NameNode,name=NameNodeStatus")
+      })
+      .returning(
+        """{"beans":[{"name":"Hadoop:service=NameNode,name=NameNameStatus","modelerType":"org.apache.hadoop.hdfs.server.namenode.NameNode","State":"standby","NNRole":"NameNode","HostAndPort":"x.x.cloudera.com:8020","SecurityEnabled":true,"LastHATransitionTime":5,"BytesWithFutureGenerationStamps":0,"SlowPeersReport":null,"SlowDisksReport":null}]}"""
+      )
+
+    (mockHttpClient.executeGet _)
+      .expects(where { (client: String, url: String) =>
+        url.contains("jmx?qry=Hadoop:service=NameNode,name=NameNodeStatus")
+      })
+      .returning(
+        """{"beans":[{"name":"Hadoop:service=NameNode,name=NameNameStatus","modelerType":"org.apache.hadoop.hdfs.server.namenode.NameNode","State":"standby","NNRole":"NameNode","HostAndPort":"x.x.cloudera.com:8020","SecurityEnabled":true,"LastHATransitionTime":5,"BytesWithFutureGenerationStamps":0,"SlowPeersReport":null,"SlowDisksReport":null}]}"""
+      )
+
+    (mockHttpClient.executeGet _)
+      .expects(where { (client: String, url: String) =>
+        url.contains("jmx?qry=Hadoop:service=NameNode,name=NameNodeStatus")
+      })
+      .returning(
+        """{"beans":[{"name":"Hadoop:service=NameNode,name=NameNameStatus","modelerType":"org.apache.hadoop.hdfs.server.namenode.NameNode","State":"standby","NNRole":"NameNode","HostAndPort":"x.x.cloudera.com:8020","SecurityEnabled":true,"LastHATransitionTime":5,"BytesWithFutureGenerationStamps":0,"SlowPeersReport":null,"SlowDisksReport":null}]}"""
+      )
+
+    (mockHttpClient.executeGet _)
+      .expects(where { (client: String, url: String) =>
+        url.contains("jmx?qry=Hadoop:service=NameNode,name=NameNodeStatus")
+      })
+      .returning(
+        """{"beans":[{"name":"Hadoop:service=NameNode,name=NameNameStatus","modelerType":"org.apache.hadoop.hdfs.server.namenode.NameNode","State":"standby","NNRole":"NameNode","HostAndPort":"x.x.cloudera.com:8020","SecurityEnabled":true,"LastHATransitionTime":5,"BytesWithFutureGenerationStamps":0,"SlowPeersReport":null,"SlowDisksReport":null}]}"""
+      )
+
+    val actual = validator(mockHttpClient).validate(ProvisionRequest(dataProduct, Some(workload)))
+
+    val expectedErrors = NonEmptyList
+      .of(
+        "Errors when connecting to hdfs NameNode",
+        "Job Source application file not found"
+      )
+      .map(msg => ValidationFail(ProvisionRequest(dataProduct, Some(workload)), msg))
+
+    val expected = Right(Validated.invalid(expectedErrors))
+
+    assert(actual == expected)
+  }
+
+  test("validate return invalid with jar not found on hdfs") {
+
+    (mockHttpClient.executeGet _)
+      .expects(where { (client: String, url: String) =>
+        url.contains("jmx?qry=Hadoop:service=NameNode,name=NameNodeStatus")
+      })
+      .returning(
+        """{"beans":[{"name":"Hadoop:service=NameNode,name=NameNameStatus","modelerType":"org.apache.hadoop.hdfs.server.namenode.NameNode","State":"standby","NNRole":"NameNode","HostAndPort":"x.x.cloudera.com:8020","SecurityEnabled":true,"LastHATransitionTime":5,"BytesWithFutureGenerationStamps":0,"SlowPeersReport":null,"SlowDisksReport":null}]}"""
+      )
+    (mockHttpClient.executeGet _)
+      .expects(where { (client: String, url: String) =>
+        url.contains("jmx?qry=Hadoop:service=NameNode,name=NameNodeStatus")
+      })
+      .returning(
+        """{"beans":[{"name":"Hadoop:service=NameNode,name=NameNameStatus","modelerType":"org.apache.hadoop.hdfs.server.namenode.NameNode","State":"active","NNRole":"NameNode","HostAndPort":"x.x.cloudera.com:8020","SecurityEnabled":true,"LastHATransitionTime":5,"BytesWithFutureGenerationStamps":0,"SlowPeersReport":null,"SlowDisksReport":null}]}"""
+      )
+
+    (mockHttpClient.executeGet _)
+      .expects(where { (client: String, url: String) =>
+        url.contains("jmx?qry=Hadoop:service=NameNode,name=NameNodeStatus")
+      })
+      .returning(
+        """{"beans":[{"name":"Hadoop:service=NameNode,name=NameNameStatus","modelerType":"org.apache.hadoop.hdfs.server.namenode.NameNode","State":"standby","NNRole":"NameNode","HostAndPort":"x.x.cloudera.com:8020","SecurityEnabled":true,"LastHATransitionTime":5,"BytesWithFutureGenerationStamps":0,"SlowPeersReport":null,"SlowDisksReport":null}]}"""
+      )
+    (mockHttpClient.executeGet _)
+      .expects(where { (client: String, url: String) =>
+        url.contains("jmx?qry=Hadoop:service=NameNode,name=NameNodeStatus")
+      })
+      .returning(
+        """{"beans":[{"name":"Hadoop:service=NameNode,name=NameNameStatus","modelerType":"org.apache.hadoop.hdfs.server.namenode.NameNode","State":"active","NNRole":"NameNode","HostAndPort":"x.x.cloudera.com:8020","SecurityEnabled":true,"LastHATransitionTime":5,"BytesWithFutureGenerationStamps":0,"SlowPeersReport":null,"SlowDisksReport":null}]}"""
+      )
+
+    (mockHttpClient.executeGet _)
+      .expects(where { (client: String, url: String) =>
+        url.contains("webhdfs/v1")
+      })
+      .returning(
+        """{"FileStatus":{"accessTime":1,"blockSize":1,"childrenNum":0,"group":"supergroup","length":2017859,"modificationTime":1,"owner":"hdfs","pathSuffix":"","permission":"644","replication":3,"storagePolicy":0,"type":"FILE"}}"""
+      )
+      .once()
+
+    val actual = validator(mockHttpClient).validate(ProvisionRequest(dataProduct, Some(workload)))
+
+    val expectedErrors = NonEmptyList
+      .of(
+        "Job Source application file not found"
+      )
+      .map(msg => ValidationFail(ProvisionRequest(dataProduct, Some(workload)), msg))
 
     val expected = Right(Validated.invalid(expectedErrors))
 

@@ -1,30 +1,29 @@
 package it.agilelab.provisioning.spark.workloads.provisioner.quartz
 
 import com.typesafe.config.ConfigFactory
-import it.agilelab.provisioning.spark.workloads.provisioner.quartz.config.ApplicationConfiguration
+import it.agilelab.provisioning.commons.client.cdp.de.cluster.model.base.Job
+import it.agilelab.provisioning.spark.workloads.provisioner.quartz.config.ApplicationConfigurationQuartz
 import org.quartz.{ Scheduler, SchedulerException }
 import org.quartz.impl.StdSchedulerFactory
 
-import java.util.Date
+import java.util.{ Date }
 class SchedulingServiceWithQuartz(propertiesFile: Option[String]) extends SchedulingService {
 
   private val scheduler      = createScheduler(propertiesFile)
   private val jobManager     = new JobManager(scheduler)
   private val triggerManager = new TriggerManager()
   override def scheduleJob(
-    jobName: String,
+    job: Job,
     jobGroup: String,
-    jarPath: String,
-    sparkClassName: String,
-    cronExp: Option[String],
-    startDate: Date,
-    endDate: Date
+    queue: String
   ): Either[SchedulerError, Date] = {
+
+    val jobName = job.name
 
     val conf = ConfigFactory.load()
 
     val livyServerUrl: Option[String] = if (conf.hasPath("provisioner.livy-url")) {
-      val livyUrl = ApplicationConfiguration.provisionerConfig.getString(ApplicationConfiguration.LIVY_URL)
+      val livyUrl = ApplicationConfigurationQuartz.provisionerConfig.getString(ApplicationConfigurationQuartz.LIVY_URL)
 
       if (livyUrl.nonEmpty) Some(livyUrl) else None
     } else None
@@ -39,10 +38,10 @@ class SchedulingServiceWithQuartz(propertiesFile: Option[String]) extends Schedu
               Left(SchedulerError(s"Error overwriting the previous job. Deletion failed, errors: $error"))
             case Right(deleted) =>
               if (!deleted) Left(SchedulerError(s"Error overwriting the previous job. Deletion failed."))
-              else createAndScheduleJob(jobName, jobGroup, jarPath, sparkClassName, cronExp, startDate, endDate)
+              else createAndScheduleJob(job, jobGroup, queue)
           }
         } else {
-          createAndScheduleJob(jobName, jobGroup, jarPath, sparkClassName, cronExp, startDate, endDate)
+          createAndScheduleJob(job, jobGroup, queue)
         }
 
       case None =>
@@ -51,20 +50,16 @@ class SchedulingServiceWithQuartz(propertiesFile: Option[String]) extends Schedu
   }
 
   private def createAndScheduleJob(
-    jobName: String,
+    job: Job,
     jobGroup: String,
-    jarPath: String,
-    sparkClassName: String,
-    cronExp: Option[String],
-    startDate: Date,
-    endDate: Date
+    queue: String
   ): Either[SchedulerError, Date] = {
 
     val jobClass = classOf[LivyJob]
 
     try {
-      val createJobResult     = jobManager.createJob(jobName, jobGroup, jobClass, jarPath, sparkClassName)
-      val createTriggerResult = triggerManager.createTrigger(jobName, jobGroup, cronExp, startDate, endDate)
+      val createJobResult     = jobManager.createJob(job, jobGroup, queue, jobClass)
+      val createTriggerResult = triggerManager.createTrigger(job, jobGroup)
 
       (createJobResult, createTriggerResult) match {
         case (Right(jobDetail), Right(trigger))   => Right(scheduler.scheduleJob(jobDetail, trigger))

@@ -9,8 +9,8 @@ import it.agilelab.provisioning.commons.config.Conf
 import it.agilelab.provisioning.mesh.repository.Repository
 import it.agilelab.provisioning.mesh.self.service.api.model.ApiResponse.ProvisioningStatus
 import it.agilelab.provisioning.mesh.self.service.lambda.core.model.Domain
-import it.agilelab.provisioning.spark.workload.core.context.ContextError
-import it.agilelab.provisioning.spark.workload.core.context.ContextError._
+import it.agilelab.provisioning.spark.workloads.core.context.ContextError._
+import it.agilelab.provisioning.spark.workloads.core.context.ContextError
 import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.artifactory.ArtifactoryGateway
 import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.clients.CdeClientFactory
 import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.credential.CredentialProvider

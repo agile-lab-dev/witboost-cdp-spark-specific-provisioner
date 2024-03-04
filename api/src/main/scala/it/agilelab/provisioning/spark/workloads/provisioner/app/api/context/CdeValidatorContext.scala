@@ -4,8 +4,8 @@ import cats.implicits.toBifunctorOps
 import it.agilelab.provisioning.aws.s3.gateway.S3Gateway
 import it.agilelab.provisioning.commons.client.cdp.de.CdpDeClient
 import it.agilelab.provisioning.commons.config.Conf
-import it.agilelab.provisioning.spark.workload.core.context.ContextError
-import it.agilelab.provisioning.spark.workload.core.context.ContextError._
+import it.agilelab.provisioning.spark.workloads.core.context.ContextError
+import it.agilelab.provisioning.spark.workloads.core.context.ContextError._
 
 final case class CdeValidatorContext(
   cdpDeClient: CdpDeClient,

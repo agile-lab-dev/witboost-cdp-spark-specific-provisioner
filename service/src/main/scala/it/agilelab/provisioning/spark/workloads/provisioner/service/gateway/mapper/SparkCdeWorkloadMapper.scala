@@ -11,9 +11,9 @@ import it.agilelab.provisioning.commons.client.cdp.de.cluster.model.request.{ Cr
 import it.agilelab.provisioning.mesh.self.service.api.model.Component.Workload
 import it.agilelab.provisioning.mesh.self.service.api.model.DataProduct
 import it.agilelab.provisioning.mesh.self.service.core.gateway.ComponentGatewayError
-import it.agilelab.provisioning.spark.workload.core.SparkCde
-import it.agilelab.provisioning.spark.workload.core.SparkCde._
-import it.agilelab.provisioning.spark.workload.core.models.DpCdp
+import it.agilelab.provisioning.spark.workloads.core.SparkCde._
+import it.agilelab.provisioning.spark.workloads.core.SparkCde
+import it.agilelab.provisioning.spark.workloads.core.models.DpCdp
 import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.artifactory.{
   ArtifactoryGateway,
   ArtifactoryGatewayError

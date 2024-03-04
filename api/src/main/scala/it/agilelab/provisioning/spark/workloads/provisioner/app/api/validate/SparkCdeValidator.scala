@@ -8,9 +8,9 @@ import it.agilelab.provisioning.commons.client.cdp.de.CdpDeClient
 import it.agilelab.provisioning.commons.validator.Validator
 import it.agilelab.provisioning.mesh.self.service.api.model.Component.Workload
 import it.agilelab.provisioning.mesh.self.service.api.model.{ DataProduct, ProvisionRequest }
-import it.agilelab.provisioning.spark.workload.core.SparkCde
-import it.agilelab.provisioning.spark.workload.core.SparkCde._
-import it.agilelab.provisioning.spark.workload.core.models.DpCdp
+import it.agilelab.provisioning.spark.workloads.core.SparkCde
+import it.agilelab.provisioning.spark.workloads.core.SparkCde._
+import it.agilelab.provisioning.spark.workloads.core.models.DpCdp
 
 import java.time.format.DateTimeFormatter
 import scala.util.Try

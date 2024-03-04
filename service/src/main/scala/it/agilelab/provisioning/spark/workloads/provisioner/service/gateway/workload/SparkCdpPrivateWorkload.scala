@@ -7,5 +7,6 @@ import it.agilelab.provisioning.commons.client.cdp.de.cluster.model.request.{ Cr
 final case class SparkCdpPrivateWorkload(
   domain: String,
   dataProduct: String,
+  queue: String,
   job: Job
 )

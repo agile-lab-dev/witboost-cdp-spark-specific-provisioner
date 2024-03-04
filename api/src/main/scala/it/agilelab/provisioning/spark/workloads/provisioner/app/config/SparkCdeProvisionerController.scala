@@ -6,9 +6,9 @@ import it.agilelab.provisioning.commons.validator.Validator
 import it.agilelab.provisioning.mesh.self.service.api.controller.ProvisionerController
 import it.agilelab.provisioning.mesh.self.service.api.model.ProvisionRequest
 import it.agilelab.provisioning.mesh.self.service.core.provisioner.Provisioner
-import it.agilelab.provisioning.spark.workload.core.context.ContextError
-import it.agilelab.provisioning.spark.workload.core.models.DpCdp
-import it.agilelab.provisioning.spark.workload.core.{ SparkCde, SparkWorkloadResponse }
+import it.agilelab.provisioning.spark.workloads.core.{ SparkCde, SparkWorkloadResponse }
+import it.agilelab.provisioning.spark.workloads.core.context.ContextError
+import it.agilelab.provisioning.spark.workloads.core.models.DpCdp
 import it.agilelab.provisioning.spark.workloads.provisioner.app.api.context.CdeValidatorContext
 import it.agilelab.provisioning.spark.workloads.provisioner.app.api.validate.SparkCdeValidator
 import it.agilelab.provisioning.spark.workloads.provisioner.service.context.ProvisionerContextCde

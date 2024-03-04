@@ -11,7 +11,18 @@ trait ConfigurationModel {
   val NETWORKING_HTTPSERVER_INTERFACE: String = s"$networking.$httpServer.$interface"
   val NETWORKING_HTTPSERVER_PORT: String      = s"$networking.$httpServer.$port"
 
-  val CLOUDERA_MODE: String = s"cloudera-mode"
-  val SCHEDULER_PROP        = s"scheduler-prop"
+  val CLOUDERA_MODE: String  = s"cloudera-mode"
+  val SCHEDULER_PROP: String = s"scheduler-prop"
+
+  val KRB5_CONF_PATH: String     = s"krb5-conf"
+  val KRB_JAAS_CONF_PATH: String = s"krb-jaas-conf"
+
+  val HDFS_NAMENODE0: String = "hdfs-nn0"
+  val HDFS_NAMENODE1: String = "hdfs-nn1"
+  val WEBHDFS_PORT: String   = "webhdfs-port"
+
+  val WEBHDFS_PROTOCOL: String = "webhdfs-protocol"
+
+  val LOGIN_CONTEXT: String = "login-context"
 
 }

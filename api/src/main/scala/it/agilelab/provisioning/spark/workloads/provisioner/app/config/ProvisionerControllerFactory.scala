@@ -5,7 +5,7 @@ import it.agilelab.provisioning.commons.principalsmapping.CdpIamPrincipals
 import it.agilelab.provisioning.commons.validator.Validator
 import it.agilelab.provisioning.mesh.self.service.api.controller.ProvisionerController
 import it.agilelab.provisioning.mesh.self.service.api.model.ProvisionRequest
-import it.agilelab.provisioning.spark.workload.core.context.ContextError
+import it.agilelab.provisioning.spark.workloads.core.context.ContextError
 
 trait ProvisionerControllerFactory[DP_SPEC, COMPONENT_SPEC, PRINCIPAL <: CdpIamPrincipals] {
   def initValidator(conf: Conf): Either[ContextError, Validator[ProvisionRequest[DP_SPEC, COMPONENT_SPEC]]]

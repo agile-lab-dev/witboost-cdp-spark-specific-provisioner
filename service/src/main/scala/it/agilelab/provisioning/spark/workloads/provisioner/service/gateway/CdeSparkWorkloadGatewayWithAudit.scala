@@ -3,8 +3,8 @@ package it.agilelab.provisioning.spark.workloads.provisioner.service.gateway
 import it.agilelab.provisioning.commons.audit.Audit
 import it.agilelab.provisioning.mesh.self.service.core.gateway.{ ComponentGatewayError, PermissionlessComponentGateway }
 import it.agilelab.provisioning.mesh.self.service.core.model.ProvisionCommand
-import it.agilelab.provisioning.spark.workload.core.models.DpCdp
-import it.agilelab.provisioning.spark.workload.core.{ SparkCde, SparkWorkloadResponse }
+import it.agilelab.provisioning.spark.workloads.core.{ SparkCde, SparkWorkloadResponse }
+import it.agilelab.provisioning.spark.workloads.core.models.DpCdp
 
 class CdeSparkWorkloadGatewayWithAudit(
   componentGateway: PermissionlessComponentGateway[DpCdp, SparkCde, SparkWorkloadResponse],

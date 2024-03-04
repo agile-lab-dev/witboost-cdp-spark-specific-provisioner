@@ -43,9 +43,17 @@ cdpPrivate:
     port: 8998
     # -- This configuration allows you to override the quartz.properties file 
     quartzPropsOverride:
+  # -- This is hdfs configuration block
+  hdfs:
+    # -- Namenode 1 hostname
+    nn1: 
+    # -- Namenode 2 hostname
+    nn2:
+    # -- WebHdfs Port
+    webhdfsPort: 9871
+    # -- WebHdfs Protocol
+    webhdfsProtocol: https
   kerberos:
-    # -- This kerberos realm
-    realm:
     # -- This configuration allows you to override the krb5.conf file
     krb5Override:
     # -- This configuration allows you to override the jaas.conf file

@@ -1,21 +1,40 @@
 package it.agilelab.provisioning.spark.workloads.provisioner.app.api.validate
 
 import cats.implicits.catsSyntaxEq
-import com.cronutils.model.definition.CronDefinitionBuilder
-import com.cronutils.parser.CronParser
 import it.agilelab.provisioning.commons.validator.Validator
 import it.agilelab.provisioning.mesh.self.service.api.model.Component.Workload
 import it.agilelab.provisioning.mesh.self.service.api.model.{ DataProduct, ProvisionRequest }
-import it.agilelab.provisioning.spark.workload.core.SparkCdpPrivate
-import it.agilelab.provisioning.spark.workload.core.models.DpCdp
+import it.agilelab.provisioning.spark.workloads.core.SparkCdpPrivate
+import it.agilelab.provisioning.spark.workloads.core.context.cdpPrivate.{
+  CommonCdpPrivateValidationErrors,
+  CustomHttpClient,
+  HdfsClient,
+  HttpClientWrapper
+}
+import it.agilelab.provisioning.spark.workloads.core.models.DpCdp
+import it.agilelab.provisioning.spark.workloads.provisioner.app.config.ApplicationConfiguration
 import org.quartz.CronExpression
+import org.slf4j.LoggerFactory
+import CommonCdpPrivateValidationErrors.NO_NAME_NODE_ERROR
 
 import java.time.format.DateTimeFormatter
 import scala.util.Try
 
 object SparkCdpPrivateValidator {
-  def validator(
-  ): Validator[ProvisionRequest[DpCdp, SparkCdpPrivate]] =
+
+  private val loginContextHttp =
+    ApplicationConfiguration.provisionerConfig.getString(ApplicationConfiguration.LOGIN_CONTEXT)
+
+  private val nn0: String             =
+    ApplicationConfiguration.provisionerConfig.getString(ApplicationConfiguration.HDFS_NAMENODE0)
+  private val nn1: String             =
+    ApplicationConfiguration.provisionerConfig.getString(ApplicationConfiguration.HDFS_NAMENODE1)
+  private val nnPort: String          =
+    ApplicationConfiguration.provisionerConfig.getString(ApplicationConfiguration.WEBHDFS_PORT)
+  private val webHdfsProtocol: String =
+    ApplicationConfiguration.provisionerConfig.getString(ApplicationConfiguration.WEBHDFS_PROTOCOL)
+
+  def validator(client: HttpClientWrapper): Validator[ProvisionRequest[DpCdp, SparkCdpPrivate]] =
     Validator[ProvisionRequest[DpCdp, SparkCdpPrivate]]
       .rule(
         r => withinReq(r)((_, _) => true),
@@ -63,6 +82,32 @@ object SparkCdpPrivateValidator {
           ),
         _ => "startDate, endDate have to match the following pattern: \"yyyy-MM-ddTHH:mm:ssZ\""
       )
+      .rule(
+        r => withinReq(r)((_, _) => HdfsClient.findActiveNameNode(nn0, nn1, nnPort, webHdfsProtocol, client).isDefined),
+        _ => "Errors when connecting to hdfs NameNode"
+      )
+      .rule(
+        r => {
+          val activeNN = HdfsClient.findActiveNameNode(nn0, nn1, nnPort, webHdfsProtocol, client)
+          activeNN match {
+            case None                 => false
+            case Some(activeNameNode) =>
+              withinReq(r)((_, w) =>
+                HdfsClient
+                  .jobExists(
+                    activeNameNode,
+                    nnPort,
+                    client,
+                    webHdfsProtocol,
+                    w.specific.appFile
+                  )
+              )
+
+            case _ => false
+          }
+        },
+        _ => "Job Source application file not found"
+      )
 
   private def withinReq(
     provisionRequest: ProvisionRequest[DpCdp, SparkCdpPrivate]
@@ -96,8 +141,7 @@ object SparkCdpPrivateValidator {
       new CronExpression(cronExpression)
       true
     } catch {
-      case e: Exception =>
+      case _: Exception =>
         false
     }
-
 }

@@ -5,9 +5,9 @@ import it.agilelab.provisioning.mesh.self.service.api.model.Component.Workload
 import it.agilelab.provisioning.mesh.self.service.api.model.{ DataProduct, ProvisionRequest }
 import it.agilelab.provisioning.mesh.self.service.core.gateway.ComponentGatewayError
 import it.agilelab.provisioning.mesh.self.service.core.model.ProvisionCommand
-import it.agilelab.provisioning.spark.workload.core.models.DpCdp
-import it.agilelab.provisioning.spark.workload.core.{ SparkCdpPrivate, SparkWorkloadResponse }
-import it.agilelab.provisioning.spark.workload.core.SparkCdpPrivate._
+import it.agilelab.provisioning.spark.workloads.core.{ SparkCdpPrivate, SparkWorkloadResponse }
+import it.agilelab.provisioning.spark.workloads.core.SparkCdpPrivate._
+import it.agilelab.provisioning.spark.workloads.core.models.DpCdp
 import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.workload.{
   SparkCdeWorkload,
   SparkCdpPrivateWorkload,
@@ -52,7 +52,8 @@ class CdpPrivateSparkWorkloadGatewayTest extends AnyFunSuite with MockFactory {
             jobName = "my-job-name",
             jar = "folder://folder/jarfile.jar",
             className = "com.MyClass",
-            jobConfig = None
+            jobConfig = None,
+            queue = ""
           )
         )
       )
@@ -68,6 +69,7 @@ class CdpPrivateSparkWorkloadGatewayTest extends AnyFunSuite with MockFactory {
             SparkCdpPrivateWorkload(
               "my-dp-domain",
               "my-dp-name",
+              "default",
               Job.spark("y", "y", "z", "cn", None, None, None, None, None, None, None, None, None, None)
             )
           )
@@ -77,6 +79,7 @@ class CdpPrivateSparkWorkloadGatewayTest extends AnyFunSuite with MockFactory {
           SparkCdpPrivateWorkload(
             "my-dp-domain",
             "my-dp-name",
+            "default",
             Job.spark("y", "y", "z", "cn", None, None, None, None, None, None, None, None, None, None)
           )
         )
@@ -143,6 +146,7 @@ class CdpPrivateSparkWorkloadGatewayTest extends AnyFunSuite with MockFactory {
             SparkCdpPrivateWorkload(
               "my-dp-domain",
               "my-dp-name",
+              "default",
               Job.spark("y", "y", "z", "cn", None, None, None, None, None, None, None, None, None, None)
             )
           )
@@ -152,6 +156,7 @@ class CdpPrivateSparkWorkloadGatewayTest extends AnyFunSuite with MockFactory {
           workload.SparkCdpPrivateWorkload(
             "my-dp-domain",
             "my-dp-name",
+            "default",
             Job.spark("y", "y", "z", "cn", None, None, None, None, None, None, None, None, None, None)
           )
         )
@@ -182,6 +187,7 @@ class CdpPrivateSparkWorkloadGatewayTest extends AnyFunSuite with MockFactory {
             SparkCdpPrivateWorkload(
               "my-dp-domain",
               "my-dp-name",
+              "default",
               Job.spark("y", "y", "z", "cn", None, None, None, None, None, None, None, None, None, None)
             )
           )
@@ -191,6 +197,7 @@ class CdpPrivateSparkWorkloadGatewayTest extends AnyFunSuite with MockFactory {
           workload.SparkCdpPrivateWorkload(
             "my-dp-domain",
             "my-dp-name",
+            "default",
             Job.spark("y", "y", "z", "cn", None, None, None, None, None, None, None, None, None, None)
           )
         )
@@ -253,6 +260,7 @@ class CdpPrivateSparkWorkloadGatewayTest extends AnyFunSuite with MockFactory {
             SparkCdpPrivateWorkload(
               "my-dp-domain",
               "my-dp-name",
+              "default",
               Job.spark("y", "y", "z", "cn", None, None, None, None, None, None, None, None, None, None)
             )
           )
@@ -262,6 +270,7 @@ class CdpPrivateSparkWorkloadGatewayTest extends AnyFunSuite with MockFactory {
           workload.SparkCdpPrivateWorkload(
             "my-dp-domain",
             "my-dp-name",
+            "default",
             Job.spark("y", "y", "z", "cn", None, None, None, None, None, None, None, None, None, None)
           )
         )

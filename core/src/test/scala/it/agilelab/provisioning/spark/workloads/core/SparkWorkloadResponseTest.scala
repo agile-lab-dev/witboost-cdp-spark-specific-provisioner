@@ -1,4 +1,4 @@
-package it.agilelab.provisioning.spark.workload.core
+package it.agilelab.provisioning.spark.workloads.core
 
 import it.agilelab.provisioning.commons.client.cdp.de.cluster.model.base.{ Job, JobDetails, Mount }
 import org.scalatest.funsuite.AnyFunSuite

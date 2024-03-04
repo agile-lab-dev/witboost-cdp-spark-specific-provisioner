@@ -8,13 +8,13 @@ trait Dependencies {
   lazy val scalaTest    = "org.scalatest" %% "scalatest"  % scalaTestVrs % "test"
   lazy val scalaMock    = "org.scalamock" %% "scalamock"  % scalaMockVrs % "test"
 
-  lazy val testDependencies = Seq(
+  lazy val testDependencies: Seq[ModuleID] = Seq(
     scalaTest,
     scalaMock
   )
 
-  lazy val scalaMeshCoreVersion     = "0.0.0-SNAPSHOT-15dfac13ba.wit-1430-scala-mesh"
-  lazy val provisioningDependencies = Seq(
+  lazy val scalaMeshCoreVersion: String            = "0.0.0-SNAPSHOT-15dfac13ba.wit-1430-scala-mesh"
+  lazy val provisioningDependencies: Seq[ModuleID] = Seq(
     "it.agilelab.provisioning" %% "scala-mesh-aws-s3"                     % scalaMeshCoreVersion,
     "it.agilelab.provisioning" %% "scala-mesh-aws-secrets"                % scalaMeshCoreVersion,
     "it.agilelab.provisioning" %% "scala-mesh-aws-lambda-handlers"        % scalaMeshCoreVersion,
@@ -51,6 +51,9 @@ trait Dependencies {
     "org.postgresql"            % "postgresql"       % "42.2.5",
     "org.apache.httpcomponents" % "httpclient"       % "4.5.13"
   )
+
+  lazy val jsonDependencies: Seq[ModuleID] = Seq("org.playframework" %% "play-json" % "3.0.2")
+
 }
 
 object Dependencies extends Dependencies

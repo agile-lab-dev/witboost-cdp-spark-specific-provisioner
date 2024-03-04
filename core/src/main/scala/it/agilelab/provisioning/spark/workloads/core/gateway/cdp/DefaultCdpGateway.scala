@@ -1,13 +1,9 @@
-package it.agilelab.provisioning.spark.workload.core.gateway.cdp
+package it.agilelab.provisioning.spark.workloads.core.gateway.cdp
 
 import cats.implicits._
 import it.agilelab.provisioning.commons.client.cdp.dl.CdpDlClient
 import it.agilelab.provisioning.commons.client.cdp.env.CdpEnvClient
-import it.agilelab.provisioning.spark.workload.core.gateway.cdp.CdpGatewayError.{
-  DatalakeNotFound,
-  DescribeCdpDlErr,
-  DescribeCdpEnvErr
-}
+import CdpGatewayError.{ DatalakeNotFound, DescribeCdpDlErr, DescribeCdpEnvErr }
 
 class DefaultCdpGateway(envClient: CdpEnvClient, dlClient: CdpDlClient) extends CdpGateway {
 

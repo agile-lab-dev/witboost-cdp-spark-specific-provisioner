@@ -14,10 +14,14 @@ A Helm chart for Kubernetes
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| cdpPrivate | object | `{"enabled":true,"kerberos":{"jaasOverride":null,"krb5Override":null,"realm":null},"livy":{"host":"livy-url","port":8998,"quartzPropsOverride":null,"url":"http://livy-url:8998"}}` | Cloudera private mode |
+| cdpPrivate | object | `{"enabled":true,"hdfs":{"nn1":null,"nn2":null,"webhdfsPort":9871,"webhdfsProtocol":"https"},"kerberos":{"jaasOverride":null,"krb5Override":null},"livy":{"host":"livy-url","port":8998,"quartzPropsOverride":null,"url":"http://livy-url:8998"}}` | Cloudera private mode |
+| cdpPrivate.hdfs | object | `{"nn1":null,"nn2":null,"webhdfsPort":9871,"webhdfsProtocol":"https"}` | This is hdfs configuration block |
+| cdpPrivate.hdfs.nn1 | string | `nil` | Namenode 1 hostname |
+| cdpPrivate.hdfs.nn2 | string | `nil` | Namenode 2 hostname |
+| cdpPrivate.hdfs.webhdfsPort | int | `9871` | WebHdfs Port |
+| cdpPrivate.hdfs.webhdfsProtocol | string | `"https"` | WebHdfs Protocol |
 | cdpPrivate.kerberos.jaasOverride | string | `nil` | This configuration allows you to override the jaas.conf file |
 | cdpPrivate.kerberos.krb5Override | string | `nil` | This configuration allows you to override the krb5.conf file |
-| cdpPrivate.kerberos.realm | string | `nil` | This kerberos realm |
 | cdpPrivate.livy | object | `{"host":"livy-url","port":8998,"quartzPropsOverride":null,"url":"http://livy-url:8998"}` | This is livy configuration block |
 | cdpPrivate.livy.quartzPropsOverride | string | `nil` | This configuration allows you to override the quartz.properties file  |
 | configOverride | string | `nil` | This configuration allows you to override the application.yaml file |

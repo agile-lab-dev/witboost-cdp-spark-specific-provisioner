@@ -1,16 +1,14 @@
 package it.agilelab.provisioning.spark.workloads.provisioner.quartz
 
+import it.agilelab.provisioning.commons.client.cdp.de.cluster.model.base.Job
+
 import java.util.Date
 
 trait SchedulingService {
   def scheduleJob(
-    jobName: String,
+    job: Job,
     jobGroup: String,
-    jarPath: String,
-    sparkClassName: String,
-    cronExp: Option[String],
-    startDate: Date,
-    endDate: Date
+    queue: String
   ): Either[SchedulerError, Date]
   def unscheduleJob(jobName: String, jobGroup: String): Either[SchedulerError, Boolean]
 }

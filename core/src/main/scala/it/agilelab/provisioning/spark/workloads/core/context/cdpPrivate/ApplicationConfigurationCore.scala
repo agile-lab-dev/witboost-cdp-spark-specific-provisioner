@@ -1,11 +1,11 @@
-package it.agilelab.provisioning.spark.workloads.provisioner.quartz.config
+package it.agilelab.provisioning.spark.workloads.core.context.cdpPrivate
 
 import com.typesafe.config.{ Config, ConfigFactory, ConfigRenderOptions }
 
 /** This is a wrapper for the Typesafe [[Config]] class. A Specific Provisioner app
   * can extend this trait to obtain the main configuration values.
   */
-trait ApplicationConfiguration extends ConfigurationModel {
+trait ApplicationConfigurationCore extends ConfigurationModelCore {
 
   /** The whole configuration starting from the "datameshProvisioner" key in the configuration files.
     */
@@ -21,6 +21,6 @@ trait ApplicationConfiguration extends ConfigurationModel {
 
 }
 
-/** A private implementation of [[Configuration]] to be used only inside the framework.
+/** A private implementation of [[ConfigurationModelCore]] to be used only inside the framework.
   */
-private[quartz] object ApplicationConfiguration extends ApplicationConfiguration
+private[core] object ApplicationConfigurationCore extends ApplicationConfigurationCore

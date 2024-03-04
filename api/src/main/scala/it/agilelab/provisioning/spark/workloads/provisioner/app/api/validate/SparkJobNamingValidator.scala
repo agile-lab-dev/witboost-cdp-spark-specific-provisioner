@@ -2,8 +2,8 @@ package it.agilelab.provisioning.spark.workloads.provisioner.app.api.validate
 
 import it.agilelab.provisioning.mesh.self.service.api.model.Component.Workload
 import it.agilelab.provisioning.mesh.self.service.api.model.DataProduct
-import it.agilelab.provisioning.spark.workload.core.SparkCde
-import it.agilelab.provisioning.spark.workload.core.models.DpCdp
+import it.agilelab.provisioning.spark.workloads.core.SparkCde
+import it.agilelab.provisioning.spark.workloads.core.models.DpCdp
 
 object SparkJobNamingValidator {
   private val COMPLIANT_NAME_REGEX = "[^a-zA-Z0-9-_]"

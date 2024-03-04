@@ -1,4 +1,4 @@
-package it.agilelab.provisioning.spark.workload.core
+package it.agilelab.provisioning.spark.workloads.core
 
 import cats.syntax.functor._
 import io.circe.generic.auto._

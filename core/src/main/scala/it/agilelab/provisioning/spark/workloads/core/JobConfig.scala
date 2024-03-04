@@ -1,4 +1,4 @@
-package it.agilelab.provisioning.spark.workload.core
+package it.agilelab.provisioning.spark.workloads.core
 
 final case class JobConfig(
   args: Option[Seq[String]],

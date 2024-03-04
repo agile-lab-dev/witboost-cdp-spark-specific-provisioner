@@ -6,10 +6,10 @@ import it.agilelab.provisioning.commons.client.cdp.de.cluster.model.base.Schedul
 import it.agilelab.provisioning.mesh.self.service.api.model.Component.Workload
 import it.agilelab.provisioning.mesh.self.service.api.model.DataProduct
 import it.agilelab.provisioning.mesh.self.service.core.gateway.ComponentGatewayError
-import it.agilelab.provisioning.spark.workload.core.{ JobScheduler, SparkCdpPrivate }
-import it.agilelab.provisioning.spark.workload.core.models.DpCdp
+import it.agilelab.provisioning.spark.workloads.core.SparkCdpPrivate
+import it.agilelab.provisioning.spark.workloads.core.SparkCdpPrivate._
 import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.workload.SparkCdpPrivateWorkload
-import it.agilelab.provisioning.spark.workload.core.SparkCdpPrivate._
+import it.agilelab.provisioning.spark.workloads.core.models.DpCdp
 
 class SparkCdpPrivateWorkloadMapper() extends SparkWorkloadMapper {
   def map(
@@ -39,10 +39,11 @@ class SparkCdpPrivateWorkloadMapper() extends SparkWorkloadMapper {
     schedule: Option[Schedule]
   ): Either[String, SparkCdpPrivateWorkload] =
     workload.specific match {
-      case SparkCdpPrivateJob(jn, appFile, className, jobConfig) =>
+      case SparkCdpPrivateJob(jn, appFile, className, jobConfig, queue) =>
         val dataProductWorkload = SparkCdpPrivateWorkload(
           dataProduct.domain,
           dataProduct.name,
+          queue,
           spark(
             jn,
             mainResource,
@@ -60,7 +61,7 @@ class SparkCdpPrivateWorkloadMapper() extends SparkWorkloadMapper {
           )
         )
         Right(dataProductWorkload)
-      case _                                                     =>
+      case _                                                            =>
         Left("Unsupported workload type: not a SparkCdpPrivateJob")
     }
 }
