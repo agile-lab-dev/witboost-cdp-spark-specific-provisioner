@@ -3,10 +3,8 @@ package it.agilelab.provisioning.spark.workloads.provisioner.app.service.gateway
 import it.agilelab.provisioning.commons.client.cdp.de.cluster.model.base.{ Job, Schedule }
 import it.agilelab.provisioning.mesh.self.service.api.model.DataProduct
 import it.agilelab.provisioning.mesh.self.service.api.model.Component.Workload
-import it.agilelab.provisioning.mesh.self.service.core.gateway.ComponentGatewayError
 import it.agilelab.provisioning.spark.workloads.core.{ JobConfig, JobScheduler, SparkCdpPrivate }
 import it.agilelab.provisioning.spark.workloads.core.SparkCdpPrivate.SparkCdpPrivateJob
-import it.agilelab.provisioning.spark.workloads.core.context.cdpPrivate.CustomHttpClient
 import it.agilelab.provisioning.spark.workloads.core.models.DpCdp
 import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.mapper.SparkCdpPrivateWorkloadMapper
 import it.agilelab.provisioning.spark.workloads.provisioner.service.gateway.workload.SparkCdpPrivateWorkload

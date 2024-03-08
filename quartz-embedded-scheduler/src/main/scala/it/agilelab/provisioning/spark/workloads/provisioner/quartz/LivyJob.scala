@@ -1,13 +1,12 @@
 package it.agilelab.provisioning.spark.workloads.provisioner.quartz
 
+import it.agilelab.provisioning.spark.workloads.core.context.cdpPrivate.httpclient.HttpClientFactory
 import org.apache.http.entity.{ ContentType, StringEntity }
 import org.quartz.{ Job, JobExecutionContext, JobExecutionException }
 import org.slf4j.LoggerFactory
-import it.agilelab.provisioning.spark.workloads.core.context.cdpPrivate.CustomHttpClient
-import it.agilelab.provisioning.spark.workloads.provisioner.quartz.config.ApplicationConfigurationQuartz
-import play.api.libs.json.{ JsObject, JsString, JsValue, Json }
+import play.api.libs.json.{ JsObject, JsString, Json }
 
-import java.time.{ LocalDateTime, ZoneId, ZonedDateTime }
+import java.time.{ ZoneId, ZonedDateTime }
 import java.time.format.DateTimeFormatter
 
 class LivyJob() extends Job {
@@ -61,13 +60,10 @@ class LivyJob() extends Job {
 
     val paramsString = Json.stringify(sparkJobParams)
 
-    val client = new CustomHttpClient
-
-    val loginContextHttp =
-      ApplicationConfigurationQuartz.provisionerConfig.getString(ApplicationConfigurationQuartz.LOGIN_CONTEXT)
+    val client = HttpClientFactory.getClient()
 
     val response =
-      client.executePost(loginContextHttp, livyRequestUrl, new StringEntity(paramsString, ContentType.APPLICATION_JSON))
+      client.executePost(livyRequestUrl, new StringEntity(paramsString, ContentType.APPLICATION_JSON))
 
     logger.info(s"Livy response: $response")
 

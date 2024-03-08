@@ -5,25 +5,21 @@ import it.agilelab.provisioning.commons.validator.Validator
 import it.agilelab.provisioning.mesh.self.service.api.model.Component.Workload
 import it.agilelab.provisioning.mesh.self.service.api.model.{ DataProduct, ProvisionRequest }
 import it.agilelab.provisioning.spark.workloads.core.SparkCdpPrivate
-import it.agilelab.provisioning.spark.workloads.core.context.cdpPrivate.{
-  CommonCdpPrivateValidationErrors,
-  CustomHttpClient,
-  HdfsClient,
-  HttpClientWrapper
-}
 import it.agilelab.provisioning.spark.workloads.core.models.DpCdp
 import it.agilelab.provisioning.spark.workloads.provisioner.app.config.ApplicationConfiguration
 import org.quartz.CronExpression
-import org.slf4j.LoggerFactory
-import CommonCdpPrivateValidationErrors.NO_NAME_NODE_ERROR
+import it.agilelab.provisioning.spark.workloads.core.context.cdpPrivate.hdfs.HdfsClient
+import it.agilelab.provisioning.spark.workloads.core.context.cdpPrivate.httpclient.{
+  HttpClientWrapper,
+  KerberosHttpClient
+}
 
+import java.io.File
+import java.net.URI
 import java.time.format.DateTimeFormatter
 import scala.util.Try
 
 object SparkCdpPrivateValidator {
-
-  private val loginContextHttp =
-    ApplicationConfiguration.provisionerConfig.getString(ApplicationConfiguration.LOGIN_CONTEXT)
 
   private val nn0: String             =
     ApplicationConfiguration.provisionerConfig.getString(ApplicationConfiguration.HDFS_NAMENODE0)
@@ -83,29 +79,37 @@ object SparkCdpPrivateValidator {
         _ => "startDate, endDate have to match the following pattern: \"yyyy-MM-ddTHH:mm:ssZ\""
       )
       .rule(
-        r => withinReq(r)((_, _) => HdfsClient.findActiveNameNode(nn0, nn1, nnPort, webHdfsProtocol, client).isDefined),
+        r =>
+          withinReq(r) { (_, w) =>
+            getUriScheme(w.specific.appFile) match {
+              case Some("hdfs") => HdfsClient.findActiveNameNode(nn0, nn1, nnPort, webHdfsProtocol, client).isDefined
+              case _            => true //skip this validation
+            }
+          },
         _ => "Errors when connecting to hdfs NameNode"
       )
       .rule(
-        r => {
-          val activeNN = HdfsClient.findActiveNameNode(nn0, nn1, nnPort, webHdfsProtocol, client)
-          activeNN match {
-            case None                 => false
-            case Some(activeNameNode) =>
-              withinReq(r)((_, w) =>
-                HdfsClient
-                  .jobExists(
-                    activeNameNode,
-                    nnPort,
-                    client,
-                    webHdfsProtocol,
-                    w.specific.appFile
-                  )
-              )
-
-            case _ => false
-          }
-        },
+        r =>
+          withinReq(r) { (_, w) =>
+            getUriScheme(w.specific.appFile) match {
+              case Some("hdfs") =>
+                val activeNN = HdfsClient.findActiveNameNode(nn0, nn1, nnPort, webHdfsProtocol, client)
+                activeNN match {
+                  case None                 => false
+                  case Some(activeNameNode) =>
+                    HdfsClient
+                      .jobExists(
+                        activeNameNode,
+                        nnPort,
+                        client,
+                        webHdfsProtocol,
+                        w.specific.appFile
+                      )
+                }
+              case None         => new File(w.specific.appFile).exists()
+              case _            => true //skip this validation
+            }
+          },
         _ => "Job Source application file not found"
       )
 
@@ -144,4 +148,9 @@ object SparkCdpPrivateValidator {
       case _: Exception =>
         false
     }
+
+  private def getUriScheme(path: String): Option[String] = {
+    val uri = new URI(path)
+    Option(uri.getScheme())
+  }
 }

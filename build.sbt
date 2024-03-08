@@ -8,7 +8,7 @@ inThisBuild(
   Seq(
     organization := "it.agilelab.provisioning",
     scalaVersion := "2.13.2",
-    version := "0.9.1"
+    version := ComputeVersion.version
   )
 )
 

@@ -58,6 +58,8 @@ cdpPrivate:
     krb5Override:
     # -- This configuration allows you to override the jaas.conf file
     jaasOverride:
+    # -- This configuration controls the use of Kerberos authentication
+    useKerberosAuth: true
 
 
 # -- security context spec

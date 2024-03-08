@@ -10,4 +10,6 @@ trait ConfigurationModelCore {
   val WEBHDFS_PORT: String     = "webhdfs-port"
   val WEBHDFS_PROTOCOL: String = "webhdfs-protocol"
 
+  val USE_KERBEROS_AUTH: String = "use-kerberos-auth"
+
 }

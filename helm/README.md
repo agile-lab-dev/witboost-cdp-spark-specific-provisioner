@@ -14,7 +14,7 @@ A Helm chart for Kubernetes
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| cdpPrivate | object | `{"enabled":true,"hdfs":{"nn1":null,"nn2":null,"webhdfsPort":9871,"webhdfsProtocol":"https"},"kerberos":{"jaasOverride":null,"krb5Override":null},"livy":{"host":"livy-url","port":8998,"quartzPropsOverride":null,"url":"http://livy-url:8998"}}` | Cloudera private mode |
+| cdpPrivate | object | `{"enabled":true,"hdfs":{"nn1":null,"nn2":null,"webhdfsPort":9871,"webhdfsProtocol":"https"},"kerberos":{"jaasOverride":null,"krb5Override":null,"useKerberosAuth":true},"livy":{"host":"livy-url","port":8998,"quartzPropsOverride":null,"url":"http://livy-url:8998"}}` | Cloudera private mode |
 | cdpPrivate.hdfs | object | `{"nn1":null,"nn2":null,"webhdfsPort":9871,"webhdfsProtocol":"https"}` | This is hdfs configuration block |
 | cdpPrivate.hdfs.nn1 | string | `nil` | Namenode 1 hostname |
 | cdpPrivate.hdfs.nn2 | string | `nil` | Namenode 2 hostname |
@@ -22,6 +22,7 @@ A Helm chart for Kubernetes
 | cdpPrivate.hdfs.webhdfsProtocol | string | `"https"` | WebHdfs Protocol |
 | cdpPrivate.kerberos.jaasOverride | string | `nil` | This configuration allows you to override the jaas.conf file |
 | cdpPrivate.kerberos.krb5Override | string | `nil` | This configuration allows you to override the krb5.conf file |
+| cdpPrivate.kerberos.useKerberosAuth | bool | `true` | This configuration controls the use of Kerberos authentication |
 | cdpPrivate.livy | object | `{"host":"livy-url","port":8998,"quartzPropsOverride":null,"url":"http://livy-url:8998"}` | This is livy configuration block |
 | cdpPrivate.livy.quartzPropsOverride | string | `nil` | This configuration allows you to override the quartz.properties file  |
 | configOverride | string | `nil` | This configuration allows you to override the application.yaml file |

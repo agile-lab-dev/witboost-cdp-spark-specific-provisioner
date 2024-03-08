@@ -145,6 +145,8 @@ spec:
               value: {{ .Values.cdpPrivate.hdfs.webhdfsPort | quote }}
             - name: WEBHDFS_PROTOCOL
               value: {{ .Values.cdpPrivate.hdfs.webhdfsProtocol}}
+            - name: USE_KERBEROS_AUTH
+              value: {{ .Values.cdpPrivate.kerberos.useKerberosAuth }}
             {{- else }}
             - name: CDP_ACCESS_KEY_ID
               valueFrom:

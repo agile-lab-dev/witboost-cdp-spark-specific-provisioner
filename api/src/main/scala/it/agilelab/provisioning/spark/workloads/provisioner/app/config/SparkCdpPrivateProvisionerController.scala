@@ -9,7 +9,10 @@ import it.agilelab.provisioning.mesh.self.service.api.model.ProvisionRequest
 import it.agilelab.provisioning.mesh.self.service.core.provisioner.Provisioner
 import it.agilelab.provisioning.spark.workloads.core.{ SparkCdpPrivate, SparkWorkloadResponse }
 import it.agilelab.provisioning.spark.workloads.core.context.ContextError
-import it.agilelab.provisioning.spark.workloads.core.context.cdpPrivate.CustomHttpClient
+import it.agilelab.provisioning.spark.workloads.core.context.cdpPrivate.httpclient.{
+  HttpClientFactory,
+  HttpClientWrapper
+}
 import it.agilelab.provisioning.spark.workloads.core.models.DpCdp
 import it.agilelab.provisioning.spark.workloads.provisioner.app.api.context.CdpPrivateValidatorContext
 import it.agilelab.provisioning.spark.workloads.provisioner.app.api.validate.SparkCdpPrivateValidator
@@ -23,7 +26,7 @@ import it.agilelab.provisioning.spark.workloads.provisioner.service.repository.M
 object SparkCdpPrivateProvisionerController
     extends ProvisionerControllerFactory[DpCdp, SparkCdpPrivate, CdpIamPrincipals] {
   setSystemProperties()
-  private val client: CustomHttpClient = new CustomHttpClient
+  private val client: HttpClientWrapper = HttpClientFactory.getClient()
 
   override def initValidator(conf: Conf): Either[ContextError, Validator[ProvisionRequest[DpCdp, SparkCdpPrivate]]] =
     CdpPrivateValidatorContext.init(conf).map { _ =>

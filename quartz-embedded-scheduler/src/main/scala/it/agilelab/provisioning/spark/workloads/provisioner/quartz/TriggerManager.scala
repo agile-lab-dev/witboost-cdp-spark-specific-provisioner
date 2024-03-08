@@ -5,7 +5,7 @@ import it.agilelab.provisioning.commons.client.cdp.de.cluster.model.base.{ Job =
 import org.quartz.{ CronScheduleBuilder, SchedulerException, Trigger, TriggerBuilder }
 
 import java.text.SimpleDateFormat
-import java.time.ZonedDateTime
+import java.time.{ ZoneId, ZonedDateTime }
 import java.time.format.DateTimeFormatter
 import java.util.TimeZone
 
@@ -21,8 +21,8 @@ class TriggerManager() {
 
       val jobName = job.name
 
-      val currentDateTime = ZonedDateTime.now
-      val formatter       = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssX")
+      val currentDateTime: ZonedDateTime = ZonedDateTime.now(ZoneId.of("UTC"))
+      val formatter                      = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssX")
 
       val cronExp: Option[String] = job.schedule.flatMap(_.cronExpression)
       val startDateString         = job.schedule.flatMap(_.start).getOrElse(currentDateTime.format(formatter))
