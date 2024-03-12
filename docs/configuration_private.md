@@ -26,20 +26,28 @@ Configuration examples:
 ## Kerberos configuration 
 
 ---
+1. **Kerberos authentication flag**
+- To enable Kerberos authentication, you should set the `USE_KERBEROS_AUTH` to `true`.
+- If you do not wish to use Kerberos authentication, set this flag to
+   any other value.
 
-1. **Kerberos Configuration File Path**: Set the `KRB5_CONF_PATH` variable to point to your Kerberos configuration file (`krb5.conf`). This file contains the Kerberos client settings.
+   ```bash
+   export USE_KERBEROS_AUTH=<true|anyValue>
+   ```
+   
+2. **Kerberos Configuration File Path**: Set the `KRB5_CONF_PATH` variable to point to your Kerberos configuration file (`krb5.conf`). This file contains the Kerberos client settings.
 
     ```bash
     export KRB5_CONF_PATH=<Path to your krb5.conf file>
     ```
 
-2. **JAAS Configuration File Path**: Specify the location of your Kerberos JAAS configuration file (`kerberos.jaas.conf`) using the `KRB_JAAS_CONF_PATH` variable. This file defines the authentication modules for Java applications.
+3. **JAAS Configuration File Path**: Specify the location of your Kerberos JAAS configuration file (`kerberos.jaas.conf`) using the `KRB_JAAS_CONF_PATH` variable. This file defines the authentication modules for Java applications.
 
     ```bash
     export KRB_JAAS_CONF_PATH=<Path to your kerberos.jaas.conf file>
     ```
 
-3. **Login Context Name**: The `LOGIN_CONTEXT` variable should be set to the name of your login context, as defined in your JAAS configuration file.
+4. **Login Context Name**: The `LOGIN_CONTEXT` variable should be set to the name of your login context, as defined in your JAAS configuration file.
 
     ```bash
     export LOGIN_CONTEXT=<Your login context name>
