@@ -34,20 +34,8 @@ Configuration examples:
    ```bash
    export USE_KERBEROS_AUTH=<true|anyValue>
    ```
-   
-2. **Kerberos Configuration File Path**: Set the `KRB5_CONF_PATH` variable to point to your Kerberos configuration file (`krb5.conf`). This file contains the Kerberos client settings.
 
-    ```bash
-    export KRB5_CONF_PATH=<Path to your krb5.conf file>
-    ```
-
-3. **JAAS Configuration File Path**: Specify the location of your Kerberos JAAS configuration file (`kerberos.jaas.conf`) using the `KRB_JAAS_CONF_PATH` variable. This file defines the authentication modules for Java applications.
-
-    ```bash
-    export KRB_JAAS_CONF_PATH=<Path to your kerberos.jaas.conf file>
-    ```
-
-4. **Login Context Name**: The `LOGIN_CONTEXT` variable should be set to the name of your login context, as defined in your JAAS configuration file.
+2. **Login Context Name**: The `LOGIN_CONTEXT` variable should be set to the name of your login context, as defined in your JAAS configuration file.
 
     ```bash
     export LOGIN_CONTEXT=<Your login context name>
@@ -126,6 +114,27 @@ Replace `<Path to your quartz.properties file>` with the actual path to your con
 ### Database Tables Setup
 
 - Quartz requires specific database tables for its operation. The scripts to create these tables are available [here](https://github.com/quartz-scheduler/quartz/tree/d42fb7770f287afbf91f6629d90e7698761ad7d8/quartz-core/src/main/resources/org/quartz/impl/jdbcjobstore). Ensure that these tables are created in your database to facilitate the Quartz job scheduling processes.
+
+
+# JVM properties
+
+Before running the application, you need to set the following properties:
+
+
+### 1. Kerberos Configuration File Path
+`-Djava.security.krb5.conf=<Path to your krb5.conf file>`
+
+This property specifies the path to the krb5.conf file, which contains configuration settings for the Kerberos protocol.
+
+### 2. JAAS Configuration File Path
+`-Djava.security.auth.login.config=<Path to your kerberos.jaas.conf file>`
+
+This property indicates the path to the kerberos.jaas.conf file, which contains login information for Java Authentication and Authorization Service (JAAS) used for Kerberos authentication. This file defines configurations for Kerberos authentication, including service principals and their respective keys.
+
+### 3. Subject Creds Only
+`-Djavax.security.auth.useSubjectCredsOnly=true`
+
+This property sets the flag to indicate that only subject credentials should be used for authentication. In Kerberos authentication contexts, this ensures that credentials acquired during the authentication process are appropriately utilized and not overridden or ignored by other credential sources.
 
 
 

@@ -60,6 +60,8 @@ cdpPrivate:
     jaasOverride:
     # -- This configuration controls the use of Kerberos authentication
     useKerberosAuth: true
+    # -- Login context
+    loginContext:
 
 
 # -- security context spec

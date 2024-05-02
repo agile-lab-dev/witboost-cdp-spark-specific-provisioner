@@ -25,7 +25,7 @@ import it.agilelab.provisioning.spark.workloads.provisioner.service.repository.M
 
 object SparkCdpPrivateProvisionerController
     extends ProvisionerControllerFactory[DpCdp, SparkCdpPrivate, CdpIamPrincipals] {
-  setSystemProperties()
+
   private val client: HttpClientWrapper = HttpClientFactory.getClient()
 
   override def initValidator(conf: Conf): Either[ContextError, Validator[ProvisionRequest[DpCdp, SparkCdpPrivate]]] =
@@ -56,15 +56,5 @@ object SparkCdpPrivateProvisionerController
         new MemoryStateRepository
       )
     }
-  }
-
-  private def setSystemProperties(): Unit = {
-    val krb5Conf    = ApplicationConfiguration.provisionerConfig.getString(ApplicationConfiguration.KRB5_CONF_PATH)
-    val krbJaasConf =
-      ApplicationConfiguration.provisionerConfig.getString(ApplicationConfiguration.KRB_JAAS_CONF_PATH)
-
-    val _ = System.setProperty("java.security.krb5.conf", krb5Conf)
-    val _ = System.setProperty("javax.security.auth.useSubjectCredsOnly", "true")
-    val _ = System.setProperty("java.security.auth.login.config", krbJaasConf)
   }
 }

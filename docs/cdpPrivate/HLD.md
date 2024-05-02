@@ -93,6 +93,10 @@ Once they are scheduled, the Quartz scheduler takes care of launching the jobs a
 Jobs are executed at their scheduled times through a call to Livy, which executes the Spark job on the cluster.
 While the provisioner concludes its role with the return of the `ProvisioningStatus`, the execution outcome and job details can be monitored through YARN within Cloudera's cluster manager. This separate step is necessary for users to check the job's status and results.
 
+Please note that if a startDate prior to the current one has been indicated, Quartz will immediately launch the first job execution and subsequent jobs will be executed according to the indicated cronExpression.
+
+
+
 
 
 ![Provisioning](img/hld_provision.png)
