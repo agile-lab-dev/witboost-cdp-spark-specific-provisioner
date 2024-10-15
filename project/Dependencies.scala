@@ -13,18 +13,18 @@ trait Dependencies {
     scalaMock
   )
 
-  lazy val scalaMeshCoreVersion: String            = "0.0.0-SNAPSHOT-15dfac13ba.wit-1430-scala-mesh"
+  lazy val scalaMeshCoreVersion: String            = "1.0.0"
   lazy val provisioningDependencies: Seq[ModuleID] = Seq(
-    "it.agilelab.provisioning" %% "scala-mesh-aws-s3"                     % scalaMeshCoreVersion,
-    "it.agilelab.provisioning" %% "scala-mesh-aws-secrets"                % scalaMeshCoreVersion,
-    "it.agilelab.provisioning" %% "scala-mesh-aws-lambda-handlers"        % scalaMeshCoreVersion,
-    "it.agilelab.provisioning" %% "scala-mesh-cdp-de"                     % scalaMeshCoreVersion,
-    "it.agilelab.provisioning" %% "scala-mesh-cdp-dl"                     % scalaMeshCoreVersion,
-    "it.agilelab.provisioning" %% "scala-mesh-cdp-env"                    % scalaMeshCoreVersion,
-    "it.agilelab.provisioning" %% "scala-mesh-self-service"               % scalaMeshCoreVersion,
-    "it.agilelab.provisioning" %% "scala-mesh-self-service-lambda"        % scalaMeshCoreVersion,
-    "it.agilelab.provisioning" %% "scala-mesh-principals-mapping"         % scalaMeshCoreVersion,
-    "it.agilelab.provisioning" %% "scala-mesh-principals-mapping-samples" % scalaMeshCoreVersion
+    "com.witboost.provisioning" %% "scala-mesh-aws-s3"                     % scalaMeshCoreVersion,
+    "com.witboost.provisioning" %% "scala-mesh-aws-secrets"                % scalaMeshCoreVersion,
+    "com.witboost.provisioning" %% "scala-mesh-aws-lambda-handlers"        % scalaMeshCoreVersion,
+    "com.witboost.provisioning" %% "scala-mesh-cdp-de"                     % scalaMeshCoreVersion,
+    "com.witboost.provisioning" %% "scala-mesh-cdp-dl"                     % scalaMeshCoreVersion,
+    "com.witboost.provisioning" %% "scala-mesh-cdp-env"                    % scalaMeshCoreVersion,
+    "com.witboost.provisioning" %% "scala-mesh-self-service"               % scalaMeshCoreVersion,
+    "com.witboost.provisioning" %% "scala-mesh-self-service-lambda"        % scalaMeshCoreVersion,
+    "com.witboost.provisioning" %% "scala-mesh-principals-mapping"         % scalaMeshCoreVersion,
+    "com.witboost.provisioning" %% "scala-mesh-principals-mapping-samples" % scalaMeshCoreVersion
   )
 
   private val http4sVersion                         = "0.23.18"

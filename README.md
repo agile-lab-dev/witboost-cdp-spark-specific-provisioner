@@ -42,15 +42,7 @@ This microservice is written in Scala 2.13, using HTTP4S for the HTTP layer. Pro
 - Java 11
 - SBT
 
-This project depends on a private library `scala-mesh-commons` which you should have access to at compile time. Currently, the library is hosted as a package in a Gitlab Maven Package Registry.
-
-To pull these libraries, we need to set up authentication to the Package Registry (see [Gitlab docs](https://docs.gitlab.com/ee/user/packages/maven_repository/?tab=sbt)). We've set authentication based on environment variables that sbt uses to authenticate. Please export the following environment variables before importing the project:
-
-```bash
-export GITLAB_ARTIFACT_HOST=https://gitlab.com/api/v4/projects/51107980/packages/maven
-export GITLAB_ARTIFACT_USER=<Gitlab Username>
-export GITLAB_ARTIFACT_TOKEN=<Gitlab Personal Access Token>
-```
+This project also depends on Witboost library [scala-mesh-commons](https://github.com/agile-lab-dev/witboost-scala-mesh-commons), published Open-Source on Maven Central.
 
 **Plugins:**  
 This project uses the following sbt plugins:

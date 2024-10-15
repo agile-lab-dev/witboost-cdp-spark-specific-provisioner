@@ -18,7 +18,7 @@ lazy val root = (project in file("."))
     mainClass in Compile := Some("it.agilelab.provisioning.spark.workloads.provisioner.app.Main"),
     artifactorySettings,
     dockerBuildOptions ++= Seq("--network=host"),
-    dockerBaseImage := "registry.gitlab.com/agilefactory/witboost.mesh/provisioning/cdp/cicd/scala-sbt",
+    dockerBaseImage := "openjdk:11-buster",
     dockerUpdateLatest := true,
     daemonUser := "daemon",
     Docker / version := (ThisBuild / version).value,
@@ -132,23 +132,4 @@ lazy val wartremoverSettings = Seq(
     Wart.DefaultArguments
   ),
   wartremoverExcluded += sourceManaged.value
-)
-
-lazy val artifactorySettings = Seq(
-  csrConfiguration ~=
-    (configuration =>
-      configuration.addRepositoryAuthentication(
-        "gitlab",
-        Authentication(
-          sys.env.getOrElse("GITLAB_ARTIFACT_USER", "GITLAB_ARTIFACT_USER"),
-          sys.env.getOrElse("GITLAB_ARTIFACT_TOKEN", "GITLAB_ARTIFACT_TOKEN")
-        )
-      )
-    ),
-  updateClassifiers / csrConfiguration := csrConfiguration.value,
-  updateSbtClassifiers / csrConfiguration := csrConfiguration.value,
-  resolvers ++= Seq(
-    ExternalResolvers.gitlabScalaMeshCommonsResolver,
-    ExternalResolvers.clouderaResolver
-  )
 )
